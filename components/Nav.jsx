@@ -12,6 +12,10 @@ const Nav = () => {
     const [providers, setProviders] = useState(null);
     const { data:session } = useSession();
 
+    // States to manage scroll direction
+    const [lastScrollTop, setLastScrollTop] = useState(0);
+    const [isNavVisible, setIsNavVisible] = useState(true);
+
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
     
@@ -29,10 +33,21 @@ const Nav = () => {
         setUpProviders();
     }, []);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollTop = window.pageYOffset;
+            setIsNavVisible(currentScrollTop < lastScrollTop || currentScrollTop < 50);
+            setLastScrollTop(currentScrollTop);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [lastScrollTop]);
+
 
     return (
-        <div className="shadow-md w-full fixed -top-10 left-0">
-            <div className="md:flex items-center justify-between bg-slate-50 py-4 md:px-10 px-7 pt-20">
+        <div className={`shadow-md w-full fixed left-0 transition-transform duration-500 ${isNavVisible ? 'top-0' : '-top-20'}`}>
+            <div className="md:flex items-center justify-between bg-slate-50 py-4 md:px-10 px-7">
                 <div className="font-bold text-2xl cursor-pointer flex items-center font-satoshi text-gray-800 w-[150px]">
                     <a href="/" className="flex justify-center items-center text-xl font-semibold pr-80">
                         <img src="/assets/icons/coffeecup.png" alt="Logo" width={50} height={50} /> 
@@ -40,7 +55,7 @@ const Nav = () => {
                     </a>
                 </div>
 
-                <div onClick={toggleMenu} className="text-3xl absolute right-8 top-20 pt-5 cursor-pointer md:hidden">
+                <div onClick={toggleMenu} className="text-3xl absolute right-8 top-7 cursor-pointer md:hidden">
                     <img src="/assets/icons/hamburger.png" alt="Hamburger" width={25} height={25} />
                 </div>
                 <ul className={`md:flex md:items-center md:pb-0 pb-10 absolute md:static bg-slate-50 md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-9 transition-all duration-500 ease-in ${isMenuOpen ? 'top-20 shadow-lg':'top-[-490px]'} md:shadow-none`}>

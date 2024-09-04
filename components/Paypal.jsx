@@ -26,9 +26,9 @@ const Paypal = ({grandTotal, onPaymentSuccess}) => {
         document.body.appendChild(script);
 
         // Cleanup on component unmount
-        return () => {
-            document.body.removeChild(script);
-        };
+        // return () => {
+        //     document.body.removeChild(script);
+        // };
         }
     }, []);
 

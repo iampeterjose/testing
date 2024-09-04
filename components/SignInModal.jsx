@@ -9,6 +9,7 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
     const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleToggle = () => {
         setIsSignIn(prev => !prev);
@@ -20,6 +21,7 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
 
     const handleLogin = async(e) => {
         e.preventDefault();
+        setLoading(true);
 
         try {
             const result = await signIn('credentials', {
@@ -39,6 +41,8 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
         } catch (error) {
             console.log('Error during sign in:', error);
             alert('An error occurred during sign in.');
+        } finally {
+            setLoading(false);  
         }
     }
 
@@ -53,9 +57,11 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
             if(password != password2){
                 setError(true);
                 alert(`Password not match!`);
+                return;
             }
             else {
                 setError(false);
+                setLoading(false);
                 try {
                     const userExists = await fetch('/api/userExists', {
                         method: 'POST',
@@ -87,6 +93,8 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
                     }
                 } catch (error) {
                     console.log('Error during reistration: ',error );
+                } finally {
+                    setLoading(false);
                 }
             }
         }
@@ -95,9 +103,9 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
     if(!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center z-50 mt-40 md:mt-10">
+        <div className="fixed inset-0 flex items-center justify-center z-50 mt-30 md:mt-10">
             <div className="fixed inset-0 bg-gray-900 opacity-50" onClick={onClose}></div>
-            <div className="relative bg-white p-8 rounded-lg shadow-lg h-[600px] w-full max-w-md mx-auto">
+            <div className="relative bg-white p-8 rounded-lg shadow-lg h-[600px] w-[400px] max-w-md mx-auto">
                 <button
                 onClick={onClose}
                 className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
@@ -126,7 +134,10 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                        <button className='bg-blue-500 text-white mt-6 h-14 rounded-full hover:bg-blue-700'>Login</button>
+                        <button 
+                            disabled={loading}
+                            className={`bg-blue-500 text-white mt-6 h-14 rounded-full hover:bg-blue-700 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >Login</button>
                     </form>
                     
                     <div className='flex flex-col mt-32'>
@@ -171,7 +182,8 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
                             onChange={(e) => setPassword2(e.target.value)}
                         />
                         <button 
-                            className='bg-white text-slate-900 mt-6 h-14 border-blue-600 border-2 rounded-full hover:bg-blue-600 hover:text-white'
+                            disabled={loading}
+                            className={`bg-white text-slate-900 mt-6 h-14 border-blue-600 border-2 rounded-full hover:bg-blue-600 hover:text-white ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >Register</button>
                     </form>
                     

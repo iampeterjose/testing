@@ -3,12 +3,18 @@ import React from 'react';
 import HistoryCard from '../../components/HistoryCard';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const History = () => {
     const [allOrders, setAllOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { data: session } = useSession();
+    const router = useRouter();
+
+    if(!session) {
+        router.push('/');
+    }
     
 
     useEffect(() => {

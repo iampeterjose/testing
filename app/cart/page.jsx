@@ -3,13 +3,20 @@ import { useSession } from 'next-auth/react';
 import { useCart } from '../context/CartContext';
 import { useRouter } from 'next/navigation';
 import Paypal from '../../components/Paypal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Cart = () => {
   const { cartItems, handleClearCart, updateQuantity } = useCart();
   const { data: session } = useSession();
   const router = useRouter();
   const [checkOut, setCheckOut] = useState(false);
+
+  // Use useEffect to handle navigation after render
+  useEffect(() => {
+    if (!session) {
+      router.push('/');
+    }
+  }, [session, router]);
 
   const handleCreateOrder = async (e) => {
     if (!session || !session.user) {
@@ -94,13 +101,14 @@ const Cart = () => {
               {cartItems.map((item) => (
                 <li key={item.id} className='my-2 border-b-2 border-b-slate-200 flex justify-between items-center p-2'>
                   <div className='flex'>
-                  <button type="button" className="p-2 w-8 h-14 my-6 text-lg" onClick={() => handleDecrementQuantity(item.id)}>-</button>
+                  <button hidden={checkOut} type="button" className="p-2 w-8 h-14 my-6 text-lg" onClick={() => handleDecrementQuantity(item.id)}>-</button>
                     <input type="text" 
+                       disabled={checkOut}
                       value={item.quantity}
                       className='w-12 h-14 border-b-2 px-3 py-2 sm:text-base border-gray-300 my-6 pl-4'
                       onChange={(e) => handleQuantityChange(item.id, e)}
                     />
-                    <button type="button" className="p-2 w-8 h-14 my-6 mr-4  text-lg" onClick={(e) => handleIncrementQuantity(item.id)}>+</button>
+                    <button hidden={checkOut} type="button" className="p-2 w-8 h-14 my-6 mr-4  text-lg" onClick={(e) => handleIncrementQuantity(item.id)}>+</button>
                     
                     <img 
                       src={item.image} 
@@ -119,7 +127,7 @@ const Cart = () => {
           ) : (
             <p>No items in the cart</p>
           )}
-          {cartItems.length > 0 && 
+          {cartItems.length > 0 && !checkOut && 
             <button
               onClick={handleClearCart}
               className="mt-4 px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
@@ -171,12 +179,18 @@ const Cart = () => {
               </table>
 
               {checkOut ? (
+                <>
                 <Paypal grandTotal={grandTotal} onPaymentSuccess={handlePaymentSuccess} />
+                <button 
+                  className="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-blue-600 w-full mt-6"
+                  onClick={() => setCheckOut(false)}
+                >Cancel Checkout</button>
+                </>
               ) : (
                 <button 
                   className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 w-full"
                   onClick={handleCreateOrder}
-                >Check Out
+                >Checkout
                 </button>
               )}
           </div>
