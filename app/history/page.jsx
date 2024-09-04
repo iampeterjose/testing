@@ -12,10 +12,12 @@ const History = () => {
     const { data: session } = useSession();
     const router = useRouter();
 
-    if(!session) {
-        router.push('/');
+  // Use useEffect to handle navigation after render
+  useEffect(() => {
+    if (!session) {
+      router.push('/');
     }
-    
+  }, [session, router]);
 
     useEffect(() => {
         if(session && session.user && session.user.email){
