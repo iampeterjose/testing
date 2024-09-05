@@ -3,6 +3,10 @@ import { useState, useEffect } from "react";
 import { useCart } from "../app/context/CartContext";
 import { useSession, getProviders } from "next-auth/react";
 import SignInModal from "./SignInModal";
+import { io } from 'socket.io-client';
+
+// Initialize Socket.IO client
+const socket = io('http://localhost:3001');
 
 const Modal = ({ isOpen, onClose, title, image, description, id, price }) => {
     const [quantity, setQuantity] = useState(1);
@@ -10,48 +14,45 @@ const Modal = ({ isOpen, onClose, title, image, description, id, price }) => {
     const { data: session } = useSession();
     const [providers, setProviders] = useState(null);
 
-    
     const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
 
     useEffect(() => {
         const setUpProviders = async () => {
             const response = await getProviders();
-
             setProviders(response);
-        }
+        };
 
         setUpProviders();
     }, []);
 
     const handleAdd = () => {
-        if(session){
-            addItem({ id, title, price, quantity: parseInt(quantity, 10), image });
+        if (session) {
+            const item = { id, title, price, quantity: parseInt(quantity, 10), image };
+            addItem(item); // This will emit the event to the server
+
             onClose();
-        } 
-        else {
+        } else {
             setIsSignInModalOpen(true);
-        } 
+        }
     };
 
     const handleSignInModalClose = () => {
-        setIsSignInModalOpen(false); // Close the SignInModal
+        setIsSignInModalOpen(false);
         onClose();
     };
-    
-    if(!isOpen) return null;
+
+    if (!isOpen) return null;
 
     return (
         <>
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="relative bg-white p-6 rounded-md shadow-lg w-4/5 lg:w-2/5 h-150">
-                {/* Close button */}
                 <button
                 onClick={onClose}
                 className="absolute top-0 right-2 text-gray-500 hover:text-gray-700 text-2xl"
                 >
                 &times;
                 </button>
-                {/* Modal content */}
                 <div className="flex md:h-50">
                     <div className="flex flex-col w-full">
                         <h2 className="mt-2 text-md leading-normal">{title}</h2>
@@ -60,7 +61,7 @@ const Modal = ({ isOpen, onClose, title, image, description, id, price }) => {
                     </div>
                     <div className="flex flex-col justify-end items-start pl-2 w-full">
                         <label>
-                            Quantity: 
+                            Quantity:
                             <input 
                                 type="number"
                                 value={quantity}
@@ -77,11 +78,10 @@ const Modal = ({ isOpen, onClose, title, image, description, id, price }) => {
                     </div>
                 </div>
             </div>
-        </div>          
-        {/* Conditionally render the SignInModal */}
+        </div>
         {isSignInModalOpen && <SignInModal isOpen={isSignInModalOpen} onClose={handleSignInModalClose} providers={providers} />}
         </>
-    )
-}
+    );
+};
 
-export default Modal
+export default Modal;
