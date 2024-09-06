@@ -23,11 +23,12 @@ const ProfileNav = ({toggleNav, isOpen}) => {
             </button>
             <nav className="mt-16">
             <ul className="text-slate-900">
-                <li className="p-4 hover:text-slate-50 hover:bg-coconut text-md border-b-2">
-                    <img src={!session.user.image ? '/assets/icons/profile.svg' : session.user.image} alt="Profile Picture" height={50} width={50} className="border-2 border-coconut rounded-full my-2" />
-                    <p>{session.user.email}</p>
-                </li>
-                <li className="p-4 hover:text-slate-50 hover:bg-coconut text-md"><p>Account Settings</p></li>
+                <Link href='/profile'>
+                    <li className="p-4 hover:text-slate-50 hover:bg-coconut text-md border-b-2">
+                        <img src={!session.user.image ? '/assets/icons/profile.svg' : session.user.image} alt="Profile Picture" height={50} width={50} className="border-2 border-coconut rounded-full my-2" />
+                        <p>{session.user.email}</p>
+                    </li>
+                </Link>
                 <Link href='/history'>
                     <li className="p-4 hover:text-slate-50 hover:bg-coconut"><p onClick={handleNavigation}>Order History</p></li>
                 </Link>

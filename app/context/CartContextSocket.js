@@ -1,33 +1,68 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { io } from 'socket.io-client';
 
 const CartContext = createContext();
+const socket = io('http://localhost:3001');
 
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
     const [checkOut, setCheckOut] = useState(false);
 
-    // Load cart items from local storage when component mounts
     useEffect(() => {
-        const savedData = localStorage.getItem('cartItems');
-        if (savedData) {
-            setCartItems(JSON.parse(savedData));
-        }
+        // Fetch initial cart items
+        const fetchCartItems = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/cart');
+                const data = await response.json();
+                setCartItems(data);
+            } catch (error) {
+                console.error('Error fetching cart items:', error);
+            }
+        };
+
+        fetchCartItems();
+
+        // Listen for cart updates
+        socket.on('update cart', (data) => {
+            setCartItems(data);
+        });
+
+        // New listener for checkout event
+        socket.on('checkout initiated', () => {
+            setCheckOut(true); // Update state to show PayPal button
+        });
+
+        // Listener for cancel checkout event
+        socket.on('cancel checkout initiated', () => {
+            setCheckOut(false);
+        });
+
+        // Cleanup on unmount
+        return () => {
+            socket.off('update cart');
+            socket.off('checkout initiated');
+        };
     }, []);
-    // Save data to local storage whenever data changes
+
     useEffect(() => {
-        if (cartItems.length > 0) {
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
-        }
-    }, [cartItems]); // Runs whenever `data` changes
+        // Listen for cart items updates from the server
+        socket.on('cart items', (items) => {
+            setCartItems(items);
+        });
+
+        // Cleanup on unmount
+        return () => {
+            socket.off('cart items');
+        };
+    }, []);
 
     // Add item
     const addItem = (item) => {
+        socket.emit('add item', item); // Emit to server
         setCartItems(prevItems => {
-            // Check if item already exists
             const existingItemIndex = prevItems.findIndex(i => i.id === item.id);
             if (existingItemIndex >= 0) {
-                // Update quantity if item already exists
                 const updatedItems = [...prevItems];
                 updatedItems[existingItemIndex] = {
                     ...updatedItems[existingItemIndex],
@@ -35,70 +70,47 @@ export const CartProvider = ({ children }) => {
                 };
                 return updatedItems;
             } else {
-                // Add new item
                 return [...prevItems, item];
             }
         });
     };
+
 
     // Remove item by id
     const handleRemoveItem = (id) => {
         setCartItems(prevItems => prevItems.filter(item => item.id !== id));
     };
 
-    //Clear or remove all items in the cart
     const handleClearCart = () => {
         setCartItems([]);
-        try {
-            localStorage.removeItem('cartItems');
-            console.log('Cleared cart items from localStorage');
-        } catch (error) {
-            console.error('Failed to clear cart items from localStorage:', error);
-        }
-    };
-
-    const handleCheckout = () => {
-        setCheckOut(true);
-    }
-
-    const cancelCheckout = () => {
-        setCheckOut(false);
-    }
+        socket.emit('clear cart'); // Notify the server to clear the cart
+    };    
 
     const updateQuantity = (id, newQuantity) => {
-        setCartItems(prevItems => {
-            const item = prevItems.find(item => item.id === id);
-            if (item && newQuantity === 0) {
-                // Confirm removal when quantity is set to 0
-                const proceed = window.confirm("Are you sure you want to remove this item from the cart?");
-                if (!proceed) {
-                    // If user does not confirm, revert to the previous quantity
-                    return prevItems;
-                }
-            }
+        // Emit update to the server
+        socket.emit('update quantity', { id, quantity: newQuantity });
+    };
 
-            const updatedItems = prevItems
-                .map(item => item.id === id ? { ...item, quantity: newQuantity } : item)
-                .filter(item => item.quantity > 0); // Remove items with quantity 0 if confirmed
-            return updatedItems;
-        });
+    // Initiate checkout
+    const handleCheckout = () => {
+        socket.emit('checkout');
+        setCheckOut(true);
+    };
+
+    // Cancel checkout
+    const cancelCheckout = () => {
+        socket.emit('cancel checkout');
+        setCheckOut(false);
     };
 
     // Total quantity
     const getTotalQuantity = () => cartItems.reduce((total, item) => total + item.quantity, 0);
-
-    // Debugging logs
-    // useEffect(() => {
-    //     console.log('Cart items updated:', cartItems);
-    // }, [cartItems]);
-
 
     return (
         <CartContext.Provider value={{ cartItems, getTotalQuantity, handleClearCart, addItem, updateQuantity, handleCheckout, cancelCheckout, checkOut }}>
             {children}
         </CartContext.Provider>
     );
-    
 };
 
 export const useCart = () => {

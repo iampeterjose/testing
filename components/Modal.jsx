@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import { useCart } from "../app/context/CartContext";
 import { useSession, getProviders } from "next-auth/react";
 import SignInModal from "./SignInModal";
-import { io } from 'socket.io-client';
+//import { io } from 'socket.io-client';
 
 // Initialize Socket.IO client
-const socket = io('http://localhost:3001');
+//const socket = io('http://localhost:3001');
 
 const Modal = ({ isOpen, onClose, title, image, description, id, price }) => {
     const [quantity, setQuantity] = useState(1);

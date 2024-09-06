@@ -25,7 +25,7 @@ const CoffeeCard = ({ title, image, description, id, price }) => {
         <>
         {/* Desktop screen */}
         <div 
-            className="hidden md:flex  justify-center items-center flex-col w-full hover:cursor-pointer group hover:shadow-xl transition-shadow hover:bg-slate-100 duration-500"
+            className="hidden md:flex justify-center items-center flex-col w-full hover:cursor-pointer group hover:shadow-xl transition-shadow hover:bg-slate-100 duration-500"
             onClick={openModal}
         >
             <div className="flex-shrink-0">
@@ -35,8 +35,8 @@ const CoffeeCard = ({ title, image, description, id, price }) => {
                     className="w-[280px] h-[280px] rounded-md"
                 />
             </div>
-            <div className="w-80 px-6">
-                <h3 className="mt-2 text-xl leading-normal">{title}</h3>
+            <div className="w-full pl-0 lg:pl-6">
+                <h3 className="mt-2 text-lg leading-normal">{title}</h3>
                 <p className="text-md text-orange-700 leading-normal">${price}</p>
             </div>
         </div>

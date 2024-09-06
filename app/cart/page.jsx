@@ -1,6 +1,6 @@
 "use client";
 import { useSession } from 'next-auth/react';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/CartContext'; 
 import { useRouter } from 'next/navigation';
 import Paypal from '../../components/Paypal';
 import { useEffect } from 'react';

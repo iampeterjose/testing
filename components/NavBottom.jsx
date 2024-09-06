@@ -29,15 +29,6 @@ const NavBottom = () => {
 
     return (
         <div>
-        {session?.user && getTotalQuantity() ? (
-        <div className="hidden md:block fixed bottom-5 right-5 z-50 w-80 h-26 p-2 bg-slate-200 rounded-md text-slate-900 border-2 border-coffee shadow-xl">
-            <p className="text-lg">Hey, Good day!</p>
-            <p className="text-md">Items on cart: {getTotalQuantity() > 0 && `${getTotalQuantity()}`}</p>
-            <Link href='/cart'>
-                <p className="text-md underline pt-2">Check my cart</p>
-            </Link>
-        </div>
-        ) :('')}
         {session?.user && 
         // Mobile screen
         <div className="md:hidden fixed -bottom-3 left-0 z-50 w-full h-20 b-slate-50 border-t-2 rounded-t-xl border-gray-200 bg-slate-50 shadow-inner">
