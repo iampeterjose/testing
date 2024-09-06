@@ -54,8 +54,8 @@ const Nav = () => {
 
 
     return (
-        <div className={`shadow-md w-full fixed left-0 transition-transform duration-500 ${isNavVisible ? 'top-0' : '-top-20'}`}>
-            <div className="md:flex items-center justify-between py-4 bg-slate-50 md:px-20 px-7">
+        <div className={`shadow-md w-full fixed left-0 transition-transform duration-500 ${isNavVisible ? 'top-0' : '-top-20'} bg-slate-50 md:px-20 px-7`}>
+            <div className="md:flex items-center justify-between py-4 bg-slate-50">
                 <div className="font-bold text-2xl cursor-pointer flex items-center font-satoshi text-gray-800 w-[150px]">
                     <a href="/" className="flex justify-center items-center text-xl font-semibold pr-80">
                         <img src="/assets/icons/coffeecup.png" alt="Logo" width={50} height={50} /> 
