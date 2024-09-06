@@ -1,8 +1,10 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useCart } from "../app/context/CartContext";
 
-const ProfileNav = ({toggleNav, isOpen}) => {
+const ProfileNav = () => {
     const { data: session } = useSession();
+    const { toggleNav, isOpen } = useCart();
 
     const handleNavigation = () => {
         toggleNav(); // Close the nav when a link is clicked
@@ -24,16 +26,16 @@ const ProfileNav = ({toggleNav, isOpen}) => {
             <nav className="mt-16">
             <ul className="text-slate-900">
                 <Link href='/profile'>
-                    <li className="p-4 hover:text-slate-50 hover:bg-coconut text-md border-b-2">
+                    <li className="p-4 hover:text-slate-50 hover:bg-coconut text-md border-b-2" onClick={handleNavigation}>
                         <img src={!session.user.image ? '/assets/icons/profile.svg' : session.user.image} alt="Profile Picture" height={50} width={50} className="border-2 border-coconut rounded-full my-2" />
                         <p>{session.user.email}</p>
                     </li>
                 </Link>
                 <Link href='/history'>
-                    <li className="p-4 hover:text-slate-50 hover:bg-coconut"><p onClick={handleNavigation}>Order History</p></li>
+                    <li className="p-4 hover:text-slate-50 hover:bg-coconut" onClick={handleNavigation}><p>Order History</p></li>
                 </Link>
                 <Link href='/'>
-                    <li className="p-4 hover:text-slate-50 hover:bg-coconut"><p onClick={signOut}>Sign Out</p></li>
+                    <li className="p-4 hover:text-slate-50 hover:bg-coconut" onClick={signOut}><p>Sign Out</p></li>
                 </Link>
             </ul>
             </nav>

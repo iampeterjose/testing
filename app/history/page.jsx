@@ -66,8 +66,10 @@ const History = () => {
                     ) : (
                         <p>No orders found.</p>
                     )}
-                    {loading && <p>Loading....</p>}
-                    {error && <p>Loading....</p>}
+                    {loading && 
+                        <img src="/assets/icons/loading.svg" alt="Loading" width={40} height={40}/>
+                    }
+                    {error && <p>Loading...</p>}
                 </div>
             </main>
         </div>

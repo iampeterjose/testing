@@ -29,19 +29,18 @@ const PopularProducts = () => {
 
   const limitedCoffeeData = coffeeData.slice(0,3);
 
-  if (isLoading) {
-    return <div className="p-5 md:p-20">Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="p-5 md:p-20">Error: {error}</div>;
-  }
-
   return (
     <section id='products' className='max-sm:mt-5 p-5 md:p-20'>
       <div className="flex flex-col justify-start gap-5">
         <h2 className="text-2xl font-palanquin font-bold">Best Seller</h2>
       </div>
+      {isLoading &&
+        <img src="/assets/icons/loading.svg" alt="Loading" width={40} height={40}/>
+      }
+
+      {error && 
+        <div>Error: {error}</div>
+      }
       <div className="mt-8 grid lg:grid-cols-3 grid-cols-3 gap-10">
         {limitedCoffeeData.map((coffee) => (
           <PopularProductsCard 

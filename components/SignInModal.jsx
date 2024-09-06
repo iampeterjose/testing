@@ -1,6 +1,7 @@
 'use client';
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import { useCart } from "../app/context/CartContext";
 
 
 const SignInModal = ({ isOpen, onClose, providers }) => {
@@ -10,6 +11,7 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
     const [password2, setPassword2] = useState('');
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(false);
+    const { toggleMenu } = useCart();
 
     const handleToggle = () => {
         setIsSignIn(prev => !prev);
@@ -37,6 +39,7 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
             else{
                 alert('Signed in successfully');
                 onClose();
+                toggleMenu();
             }
         } catch (error) {
             console.log('Error during sign in:', error);

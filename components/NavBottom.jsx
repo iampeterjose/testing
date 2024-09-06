@@ -6,13 +6,8 @@ import ProfileNav from "./ProfileNav";
 import { useSession } from "next-auth/react";
 
 const NavBottom = () => {
-    const { getTotalQuantity, isUserLoggedIn } = useCart();
-    const [isOpen, setIsOpen] = useState(false);
+    const { getTotalQuantity, isUserLoggedIn, toggleNav, isOpen } = useCart();
     const { data: session } = useSession();
-
-    const toggleNav = () => {
-      setIsOpen(!isOpen);
-    };
 
     useEffect(() => {
         if (isOpen) {
@@ -40,23 +35,23 @@ const NavBottom = () => {
                     <span>Home</span>
                 </Link>
                 <Link href='/cart'className="inline-flex flex-col items-center justify-center border-gray-200 border-x hover:bg-gray-200">
-                    <span className="flex items-center">
+                    <span className="flex items-center"> 
+                        <img src="/assets/icons/bag.svg" alt="Bag" width={20} height={20} />
                         {getTotalQuantity() > 0 ? (
-                            <span className="bg-red-600 text-white pl-2 rounded-full">{getTotalQuantity()} &nbsp;</span>
+                            <span className="text-sm">({getTotalQuantity()})</span>
                         ) : (
                             ''
-                        )}  
-                        <img src="/assets/icons/bag.svg" alt="Bag" width={20} height={20} />
+                        )} 
                     </span>
                     <span>Orders</span>
                 </Link>
-                <p className="inline-flex flex-col items-center justify-center border-gray-200 border-x hover:bg-gray-200" onClick={toggleNav}>
+                <p className="inline-flex flex-col items-center justify-center border-gray-200 border-x hover:bg-gray-200" onClick={() => toggleNav()}>
                     <span className="flex items-center">
                         <img src={!session.user.image ? '/assets/icons/profile.svg' : session.user.image} alt="Profile" width={20} height={20} className="rounded-full" />
                     </span>
                     <span>Profile</span>
                 </p>
-                <ProfileNav toggleNav={toggleNav} isOpen={isOpen} />
+                <ProfileNav />
             </div>
         </div>
         }

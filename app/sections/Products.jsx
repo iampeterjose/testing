@@ -39,14 +39,6 @@ const Products = () => {
     setFilteredCoffeeData(filteredData);
   }, [searchQuery, coffeeData]);
 
-  if (isLoading) {
-    return <div className="p-5 md:p-20">Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="p-5 md:p-20">Error: {error}</div>;
-  }
-
   return (
     <section className='max-sm:mt-5 p-5 md:p-20'>
       <div className="flex flex-col justify-start gap-5">
@@ -61,6 +53,13 @@ const Products = () => {
             onChange={(e) => setSetSearchQuery(e.target.value)}
             />
         </div>
+        {isLoading &&
+          <img src="/assets/icons/loading.svg" alt="Loading" width={40} height={40}/>
+        }
+
+        {error && 
+          <div>Error: {error}</div>
+        }
       </div>
       <div className="mt-4 md:my-10 grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-1 md:gap-4">
         {filteredCoffeeData.map((coffee) => (

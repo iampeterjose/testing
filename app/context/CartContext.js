@@ -6,6 +6,43 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
     const [checkOut, setCheckOut] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    // States to manage scroll direction and visibility
+    const [lastScrollTop, setLastScrollTop] = useState(0);
+    const [isNavVisible, setIsNavVisible] = useState(true);
+
+    const toggleMenu = () => {
+        setIsMenuOpen(prev => !prev);
+    };
+
+    const toggleNav = () => {
+        setIsOpen(prev => !prev);
+    };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollTop = window.pageYOffset;
+            if(!isMenuOpen){
+                // Show nav when scrolling up or near the top of the page
+                if (currentScrollTop < lastScrollTop || currentScrollTop < 50) {
+                    setIsNavVisible(true);
+                } else {
+                    // Hide nav when scrolling down
+                    setIsNavVisible(false);
+                }
+            }
+            else{
+                setIsNavVisible(true);
+            }
+            
+            setLastScrollTop(currentScrollTop);
+            
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [lastScrollTop]);
 
     // Load cart items from local storage when component mounts
     useEffect(() => {
@@ -94,7 +131,7 @@ export const CartProvider = ({ children }) => {
 
 
     return (
-        <CartContext.Provider value={{ cartItems, getTotalQuantity, handleClearCart, addItem, updateQuantity, handleCheckout, cancelCheckout, checkOut }}>
+        <CartContext.Provider value={{ cartItems, getTotalQuantity, handleClearCart, addItem, updateQuantity, handleCheckout, cancelCheckout, checkOut, toggleMenu, isMenuOpen, toggleNav, isOpen, isNavVisible }}>
             {children}
         </CartContext.Provider>
     );
