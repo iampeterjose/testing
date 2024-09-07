@@ -3,18 +3,27 @@ import { useSession } from 'next-auth/react';
 import { useCart } from '../context/CartContext'; 
 import { useRouter } from 'next/navigation';
 import Paypal from '../../components/Paypal';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Cart = () => {
-    const { cartItems, handleClearCart, updateQuantity, handleCheckout, cancelCheckout, checkOut } = useCart();
+    const { cartItems, handleClearCart, updateQuantity, totalAmount, grandTotal, vat } = useCart();
     const { data: session } = useSession();
     const router = useRouter();
+    const [checkOut, setCheckOut] = useState(false);
 
     useEffect(() => {
         if (!session) {
             router.push('/');
         }
-    }, [session, router]);
+    }, []);
+
+    const handleCheckout = () => {
+        setCheckOut(true);
+    }
+
+    const cancelCheckout = () => {
+        setCheckOut(false);
+    }
 
     const handlePaymentSuccess = async (orderId) => {
         try {
@@ -42,10 +51,6 @@ const Cart = () => {
         }
     };
 
-    // Calculate total amount
-    const totalAmount = cartItems.reduce((total, item) => item.price * item.quantity + total, 0);
-    const vat = totalAmount * 0.12;
-    const grandTotal = (totalAmount + vat).toFixed(2);
 
     const handleQuantityChange = (id, e) => {
         const newQuantity = Number(e.target.value);

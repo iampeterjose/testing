@@ -25,8 +25,8 @@ export default function RootLayout({ children }) {
       <Provider>
       <CartProvider>
       <Nav />
-      {children}
       <NavBottom />
+      {children}
       <Footer />
       </CartProvider>
       </Provider>

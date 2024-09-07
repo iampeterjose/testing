@@ -6,8 +6,15 @@ import ProfileNav from "./ProfileNav";
 import { useSession } from "next-auth/react";
 
 const NavBottom = () => {
-    const { getTotalQuantity, isUserLoggedIn, toggleNav, isOpen } = useCart();
+    const { getTotalQuantity } = useCart();
     const { data: session } = useSession();
+    const [isOpen, setIsOpen] = useState(false);
+    const [lastScrollBottom, setLastScrollBottom] = useState(0);
+    const [isNavBottomVisible, setIsNavBottomVisible] = useState(true);
+
+    const toggleNav = () => {
+        setIsOpen(prev => !prev);
+    };
 
     useEffect(() => {
         if (isOpen) {
@@ -20,13 +27,39 @@ const NavBottom = () => {
         return () => {
           document.body.style.overflow = '';
         };
-      }, [isOpen]);
+    }, [isOpen]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollBottom = window.pageYOffset;
+            if(!isOpen){
+                // Show nav when scrolling up or near the top of the page
+                if (currentScrollBottom < lastScrollBottom || currentScrollBottom < 10) {
+                    setIsNavBottomVisible(true);
+                } else {
+                    // Hide nav when scrolling down
+                    setIsNavBottomVisible(false);
+                }
+            }
+            else{
+                setIsNavBottomVisible(true);
+            }
+            
+            setLastScrollBottom(currentScrollBottom);
+            
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [lastScrollBottom]);
 
     return (
-        <div>
+        <div className="border-2 border-red-500">
         {session?.user && 
+        <>
+        <ProfileNav toggleNav={toggleNav} isOpen={isOpen} />
         // Mobile screen
-        <div className="md:hidden fixed -bottom-3 left-0 z-50 w-full h-20 b-slate-50 border-t-2 rounded-t-xl border-gray-200 bg-slate-50 shadow-inner">
+        <div className={`md:hidden fixed -bottom-20 left-0 z-50 w-full h-20 b-slate-50 border-t-2 rounded-t-xl border-gray-200 bg-slate-50 shadow-inner transition-transform duration-500 ${isNavBottomVisible ? 'translate-y-0' : '-translate-y-full'}`}>
             <div className="grid h-full max-w-full grid-cols-3 mx-auto text-sm">
                 <Link href='/' className="inline-flex flex-col items-center justify-center border-gray-200 border-x hover:bg-gray-200">
                     <span className="flex items-center">
@@ -45,15 +78,15 @@ const NavBottom = () => {
                     </span>
                     <span>Orders</span>
                 </Link>
-                <p className="inline-flex flex-col items-center justify-center border-gray-200 border-x hover:bg-gray-200" onClick={() => toggleNav()}>
+                <p className="inline-flex flex-col items-center justify-center border-gray-200 border-x hover:bg-gray-200" onClick={toggleNav}>
                     <span className="flex items-center">
                         <img src={!session.user.image ? '/assets/icons/profile.svg' : session.user.image} alt="Profile" width={20} height={20} className="rounded-full" />
                     </span>
                     <span>Profile</span>
                 </p>
-                <ProfileNav />
             </div>
         </div>
+        </>
         }
         </div>
     )

@@ -1,10 +1,8 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useCart } from "../app/context/CartContext";
 
-const ProfileNav = () => {
+const ProfileNav = ({ toggleNav, isOpen }) => {
     const { data: session } = useSession();
-    const { toggleNav, isOpen } = useCart();
 
     const handleNavigation = () => {
         toggleNav(); // Close the nav when a link is clicked
@@ -13,7 +11,7 @@ const ProfileNav = () => {
     return (
         <>
         <div
-            className={`fixed top-0 left-0 h-full bg-slate-50 text-slate-900 duration-500 ease-in-out transition-transform transform ${
+            className={`fixed top-0 left-0 h-full z-100 bg-slate-50 text-slate-900 duration-500 ease-in-out transition-transform transform ${
             isOpen ? 'translate-x-0' : '-translate-x-full'
             } w-64 z-50 shadow-xl`}
         >

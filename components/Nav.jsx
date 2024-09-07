@@ -7,9 +7,12 @@ import SignInModal from "./SignInModal";
 import { useCart } from "../app/context/CartContext";
 
 const Nav = () => {
-    const { getTotalQuantity, toggleMenu, isMenuOpen, isNavVisible } = useCart();
+    const { getTotalQuantity } = useCart();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [lastScrollTop, setLastScrollTop] = useState(0);
+    const [isNavVisible, setIsNavVisible] = useState(true);
     const [providers, setProviders] = useState(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { data: session } = useSession();
 
     const [dropdown, setDropdown] = useState(false);
@@ -17,10 +20,13 @@ const Nav = () => {
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
+    const toggleMenu = () => {
+        setIsMenuOpen(prev => !prev);
+    };
+
     const toggleDropdown = () => {
         setDropdown(prev => !prev);
     };
-
 
     useEffect(() => {
         const setUpProviders = async () => {
@@ -31,10 +37,34 @@ const Nav = () => {
         setUpProviders();
     }, []);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollTop = window.pageYOffset;
+            if(!isMenuOpen){
+                // Show nav when scrolling up or near the top of the page
+                if (currentScrollTop < lastScrollTop || currentScrollTop < 50) {
+                    setIsNavVisible(true);
+                } else {
+                    // Hide nav when scrolling down
+                    setIsNavVisible(false);
+                }
+            }
+            else{
+                setIsNavVisible(true);
+            }
+            
+            setLastScrollTop(currentScrollTop);
+            
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [lastScrollTop]);
+
 
     return (
         <>
-        <div className={`fixed top-0 left-0 w-full shadow-md bg-slate-50 md:px-20 px-7 transition-transform duration-500 ${isNavVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+        <div className={`fixed z-20 top-0 left-0 w-full shadow-md bg-slate-50 md:px-20 px-7 transition-transform duration-500 ${isNavVisible ? 'translate-y-0' : '-translate-y-full'}`}>
             <div className="md:flex items-center justify-between py-4 bg-slate-50">
                 <div className="font-bold text-2xl cursor-pointer flex items-center font-satoshi text-gray-800 w-[150px]">
                     <a href="/" className="flex justify-center items-center text-xl font-semibold pr-80">

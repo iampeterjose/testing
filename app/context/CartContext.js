@@ -1,48 +1,11 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
-    const [checkOut, setCheckOut] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
-    // States to manage scroll direction and visibility
-    const [lastScrollTop, setLastScrollTop] = useState(0);
-    const [isNavVisible, setIsNavVisible] = useState(true);
 
-    const toggleMenu = () => {
-        setIsMenuOpen(prev => !prev);
-    };
-
-    const toggleNav = () => {
-        setIsOpen(prev => !prev);
-    };
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const currentScrollTop = window.pageYOffset;
-            if(!isMenuOpen){
-                // Show nav when scrolling up or near the top of the page
-                if (currentScrollTop < lastScrollTop || currentScrollTop < 50) {
-                    setIsNavVisible(true);
-                } else {
-                    // Hide nav when scrolling down
-                    setIsNavVisible(false);
-                }
-            }
-            else{
-                setIsNavVisible(true);
-            }
-            
-            setLastScrollTop(currentScrollTop);
-            
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [lastScrollTop]);
 
     // Load cart items from local storage when component mounts
     useEffect(() => {
@@ -94,14 +57,6 @@ export const CartProvider = ({ children }) => {
         }
     };
 
-    const handleCheckout = () => {
-        setCheckOut(true);
-    }
-
-    const cancelCheckout = () => {
-        setCheckOut(false);
-    }
-
     const updateQuantity = (id, newQuantity) => {
         setCartItems(prevItems => {
             const item = prevItems.find(item => item.id === id);
@@ -129,9 +84,17 @@ export const CartProvider = ({ children }) => {
     //     console.log('Cart items updated:', cartItems);
     // }, [cartItems]);
 
+    // Calculate total amount
+    const totalAmount = cartItems.reduce((total, item) => item.price * item.quantity + total, 0);
+    const vat = totalAmount * 0.12;
+    const grandTotal = (totalAmount + vat).toFixed(2);
+
+    const value = useMemo(() => ({cartItems, getTotalQuantity, handleClearCart, addItem, updateQuantity, totalAmount,grandTotal, vat}), [cartItems]);
+
+
 
     return (
-        <CartContext.Provider value={{ cartItems, getTotalQuantity, handleClearCart, addItem, updateQuantity, handleCheckout, cancelCheckout, checkOut, toggleMenu, isMenuOpen, toggleNav, isOpen, isNavVisible }}>
+        <CartContext.Provider value={value}>
             {children}
         </CartContext.Provider>
     );
