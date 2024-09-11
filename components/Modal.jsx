@@ -10,10 +10,9 @@ import SignInModal from "./SignInModal";
 
 const Modal = ({ isOpen, onClose, title, image, description, id, price }) => {
     const [quantity, setQuantity] = useState(1);
-    const { addItem } = useCart();
+    const { addItem, addItemToDb } = useCart();
     const { data: session } = useSession();
     const [providers, setProviders] = useState(null);
-
     const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
 
     useEffect(() => {
@@ -27,8 +26,9 @@ const Modal = ({ isOpen, onClose, title, image, description, id, price }) => {
 
     const handleAdd = () => {
         if (session) {
-            const item = { id, title, price, quantity: parseInt(quantity, 10), image };
-            addItem(item); // This will emit the event to the server
+            const userEmail = session?.user.email;
+            const item = { id: parseInt(id, 10), title, price, quantity: parseInt(quantity, 10), image };
+            addItemToDb(userEmail, item);
 
             onClose();
         } else {

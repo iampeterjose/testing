@@ -2,6 +2,7 @@
 import { useSession } from "next-auth/react"
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const page = () => {
     const { data:session } = useSession();
@@ -19,8 +20,9 @@ const page = () => {
     return (
         <div className='flex flex-col min-h-screen'>
             <main className='flex-grow'>
-                <div className='flex flex-col md:flex-row p-5 md:p-20 mt-32 md:mt-20 '>
+                <div className='flex flex-col md:flex-row p-5 md:p-20 mt-28 md:mt-20 '>
                     <div className="w-full">
+                    <Link href='/'><p className='text-blue-600 underline'>Go back to Homepage</p></Link>
                         <h1 className="text-2xl text-slate-700">My Profile</h1>
                         <img 
                             src={!session?.user.image ? '/assets/icons/profile.svg' : session.user.image} 

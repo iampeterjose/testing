@@ -4,9 +4,10 @@ import { useCart } from '../context/CartContext';
 import { useRouter } from 'next/navigation';
 import Paypal from '../../components/Paypal';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 const Cart = () => {
-    const { cartItems, handleClearCart, updateQuantity, totalAmount, grandTotal, vat } = useCart();
+    const { handleClearCart, updateQuantityInDb, totalAmount, grandTotal, vat, cartItemsFromDb, cartLoading } = useCart();
     const { data: session } = useSession();
     const router = useRouter();
     const [checkOut, setCheckOut] = useState(false);
@@ -16,6 +17,8 @@ const Cart = () => {
             router.push('/');
         }
     }, []);
+
+    console.log(cartItemsFromDb);
 
     const handleCheckout = () => {
         setCheckOut(true);
@@ -31,13 +34,13 @@ const Cart = () => {
                 method: 'POST',
                 body: JSON.stringify({
                     creator: session.user.email,
-                    orders: cartItems,
+                    orders: cartItemsFromDb,
                     orderId: orderId,
                 }),
             });
 
             if (response.ok) {
-                handleClearCart();
+                handleClearCart(session.user.email);
                 alert('Order successfully processed!');
                 router.push('/');
             } else {
@@ -54,33 +57,38 @@ const Cart = () => {
 
     const handleQuantityChange = (id, e) => {
         const newQuantity = Number(e.target.value);
-        updateQuantity(id, newQuantity);
+        updateQuantityInDb(session.user.email ,id, newQuantity);
     };
-
+    
     const handleIncrementQuantity = (id) => {
-        const item = cartItems.find(item => item.id === id);
+        const item = cartItemsFromDb.find(item => item.id === id);
         if (item) {
-            updateQuantity(id, item.quantity + 1);
+            updateQuantityInDb(session.user.email ,id, item.quantity + 1);
         }
     };
-
+    
     const handleDecrementQuantity = (id) => {
-        const item = cartItems.find(item => item.id === id);
+        const item = cartItemsFromDb.find(item => item.id === id);
         if (item) {
-            updateQuantity(id, Math.max(0, item.quantity - 1));
+            updateQuantityInDb(session.user.email ,id, Math.max(0, item.quantity - 1));
         }
+    };
+    
+    const handleRemoveItem = (id) => {
+        handleRemoveItem(id);
     };
 
     return (
         <div className='flex flex-col min-h-screen'>
             <main className='flex-grow'>
-                <div className='flex flex-col md:flex-row p-5 md:p-20 mt-32 md:mt-20 '>
+                <div className='flex flex-col md:flex-row p-5 md:p-20 mt-28 md:mt-20 '>
                     <div className='w-full'>
+                    <Link href='/'><p className='text-blue-600 underline'>Go back to Homepage</p></Link>
                         <h1 className='text-2xl'>Cart</h1>
-                        {cartItems.length > 0 ? (
+                        {cartItemsFromDb.length > 0 ? (
                             <form action="">
                                 <ul className='flex flex-col mt-2'>
-                                    {cartItems.map((item) => (
+                                    {cartItemsFromDb.map((item) => (
                                         <li key={item.id} className='my-2 border-b-2 border-b-slate-200 flex justify-between items-center p-2'>
                                             <div className='flex'>
                                                 <button hidden={checkOut} type="button" className="p-2 w-8 h-14 my-6 text-lg" onClick={() => handleDecrementQuantity(item.id)}>-</button>
@@ -107,18 +115,22 @@ const Cart = () => {
                                 </ul>
                             </form>
                         ) : (
+                            <>
                             <p>No items in the cart</p>
+                            
+                            {cartLoading && <img src="/assets/icons/loading.svg" alt="Loading" width={40} height={40}/>}
+                            </>
                         )}
-                        {cartItems.length > 0 && !checkOut && 
+                        {cartItemsFromDb.length > 0 && !checkOut && 
                             <button
-                                onClick={handleClearCart}
+                                onClick={()=> handleClearCart(session.user.email)}
                                 className="mt-4 px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                             >
                                 Clear Cart
                             </button>
                         }
                     </div>
-                    {cartItems.length > 0 && 
+                    {cartItemsFromDb.length > 0 && 
                         <div className='w-full mt-10 md:mt-0 md:p-20'>
                             <h2 className='text-lg'>Order Summary</h2>
                             <table className='table-auto w-full my-10 md:mt-2'>
@@ -131,7 +143,7 @@ const Cart = () => {
                                     </tr>
                                 </thead>
                                 <tbody className='text-md'>
-                                    {cartItems.map((cart) => (
+                                    {cartItemsFromDb.map((cart) => (
                                         <tr key={cart.id}>
                                             <td>{cart.title}</td>
                                             <td>${cart.price}</td>

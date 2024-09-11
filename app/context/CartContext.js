@@ -1,104 +1,162 @@
 "use client";
+import { useSession } from 'next-auth/react';
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState([]);
+    const [cartItemsFromDb, setCartItemsFromDb] = useState([]);
+    const { data: session } = useSession();
+    const [cartLoading, setCartLoading] = useState(true);
 
+    const user = session?.user.email;
 
-    // Load cart items from local storage when component mounts
-    useEffect(() => {
-        const savedData = localStorage.getItem('cartItems');
-        if (savedData) {
-            setCartItems(JSON.parse(savedData));
-        }
-    }, []);
-    // Save data to local storage whenever data changes
-    useEffect(() => {
-        if (cartItems.length > 0) {
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
-        }
-    }, [cartItems]); // Runs whenever `data` changes
-
-    // Add item
-    const addItem = (item) => {
-        setCartItems(prevItems => {
-            // Check if item already exists
-            const existingItemIndex = prevItems.findIndex(i => i.id === item.id);
-            if (existingItemIndex >= 0) {
-                // Update quantity if item already exists
-                const updatedItems = [...prevItems];
-                updatedItems[existingItemIndex] = {
-                    ...updatedItems[existingItemIndex],
-                    quantity: updatedItems[existingItemIndex].quantity + item.quantity
-                };
-                return updatedItems;
-            } else {
-                // Add new item
-                return [...prevItems, item];
-            }
-        });
-    };
-
-    // Remove item by id
-    const handleRemoveItem = (id) => {
-        setCartItems(prevItems => prevItems.filter(item => item.id !== id));
-    };
-
-    //Clear or remove all items in the cart
-    const handleClearCart = () => {
-        setCartItems([]);
+    const fetchItems = async (creator) => {
         try {
-            localStorage.removeItem('cartItems');
-            console.log('Cleared cart items from localStorage');
+            // Ensure creator is provided
+            if (!creator) {
+                throw new Error('Creator is required to fetch items');
+            }
+    
+            // Construct the URL with query parameters
+            const url = new URL('/api/cart', window.location.origin);
+            url.searchParams.append('creator', creator);
+    
+            // Fetch data from the API
+            const response = await fetch(url.toString());
+    
+            // Check for successful response
+            if (!response.ok) {
+                throw new Error('Failed to fetch items');
+            }
+    
+            // Parse the JSON data
+            const itemsData = await response.json();
+            setCartItemsFromDb(itemsData.items);
+            return itemsData; // Optionally return the data for further use
         } catch (error) {
-            console.error('Failed to clear cart items from localStorage:', error);
+            console.error('Error fetching items:', error);
         }
     };
 
-    const updateQuantity = (id, newQuantity) => {
-        setCartItems(prevItems => {
-            const item = prevItems.find(item => item.id === id);
-            if (item && newQuantity === 0) {
-                // Confirm removal when quantity is set to 0
-                const proceed = window.confirm("Are you sure you want to remove this item from the cart?");
-                if (!proceed) {
-                    // If user does not confirm, revert to the previous quantity
-                    return prevItems;
+    useEffect(() => {
+        if (user) {
+            const loadCart = async () => {
+                try {
+                    await fetchItems(user);
+                } catch (error) {
+                    console.log('Error fetching cart items from DB:', error);
+                } finally {
+                    setCartLoading(false);
                 }
-            }
+            };
+            loadCart();
+        }
+    }, [user]);
+    
 
-            const updatedItems = prevItems
-                .map(item => item.id === id ? { ...item, quantity: newQuantity } : item)
-                .filter(item => item.quantity > 0); // Remove items with quantity 0 if confirmed
-            return updatedItems;
-        });
+    const addItemToDb = async (userEmail, item) => {
+        try {
+            const response = await fetch('/api/cart', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    creator: userEmail,
+                    items: [item],
+                }),
+            });
+            if (response.ok) {
+                console.log('Item added to cart DB');
+                fetchItems(userEmail);
+            } else {
+                const errorText = await response.text();
+                console.log('Failed adding item to cart DB:', errorText);
+            }
+        } catch (error) {
+            console.log('An error occurred when adding item to cart DB:', error);
+        }
     };
 
-    // Total quantity
-    const getTotalQuantity = () => cartItems.reduce((total, item) => total + item.quantity, 0);
+    const deleteItemFromDb = async (userEmail, itemId) => {
+        try {
+            const response = await fetch('/api/cart', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    creator: userEmail,
+                    itemId,
+                }),
+            });
+            if (response.ok) {
+                console.log('Cart item deleted from DB');
+            } else {
+                const errorText = await response.text();
+                console.log('Failed to delete cart item from DB:', errorText);
+            }
+        } catch (error) {
+            console.log('An error occurred when deleting cart item from DB:', error);
+        }
+    };
 
-    // Debugging logs
-    // useEffect(() => {
-    //     console.log('Cart items updated:', cartItems);
-    // }, [cartItems]);
+    const handleClearCart = async (userEmail) => {
+        if (userEmail) {
+            try {
+                const response = await fetch('/api/cart', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ creator: userEmail }),
+                });
+                if (!response.ok) {
+                    console.error('Failed to clear cart items in DB');
+                } else {
+                    console.log('Cleared cart items from DB');
+                    fetchItems(userEmail);
+                }
+            } catch (error) {
+                console.error('Failed to clear cart items:', error);
+            }
+        }
+    };
+    
+    
 
-    // Calculate total amount
-    const totalAmount = cartItems.reduce((total, item) => item.price * item.quantity + total, 0);
+    const updateQuantityInDb = async (userEmail, itemId, newQuantity) => {
+        try {
+            const response = await fetch('/api/cart', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    creator: userEmail,
+                    itemId: Number(itemId),
+                    quantity: newQuantity
+                }),
+            });
+            if (response.ok) {
+                console.log('Cart item updated in DB');
+                fetchItems(userEmail);
+            } else {
+                const errorText = await response.text();
+                console.log('Failed to update cart item in DB:', errorText);
+            }
+        } catch (error) {
+            console.log('An error occurred when updating cart item in DB:', error);
+        }
+    };
+    
+
+    const getTotalQuantity = () => cartItemsFromDb.reduce((total, item) => total + item.quantity, 0);
+
+    const totalAmount = cartItemsFromDb.reduce((total, item) => item.price * item.quantity + total, 0);
     const vat = totalAmount * 0.12;
     const grandTotal = (totalAmount + vat).toFixed(2);
 
-    const value = useMemo(() => ({cartItems, getTotalQuantity, handleClearCart, addItem, updateQuantity, totalAmount,grandTotal, vat}), [cartItems]);
-
-
+    const value = useMemo(() => ({getTotalQuantity, handleClearCart, addItemToDb, updateQuantityInDb, totalAmount, grandTotal, vat, fetchItems, cartItemsFromDb, cartLoading}), [cartItemsFromDb]);
 
     return (
         <CartContext.Provider value={value}>
             {children}
         </CartContext.Provider>
     );
-    
 };
 
 export const useCart = () => {

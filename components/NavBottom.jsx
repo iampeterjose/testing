@@ -59,7 +59,7 @@ const NavBottom = () => {
         <>
         <ProfileNav toggleNav={toggleNav} isOpen={isOpen} />
         // Mobile screen
-        <div className={`md:hidden fixed -bottom-20 left-0 z-50 w-full h-20 b-slate-50 border-t-2 rounded-t-xl border-gray-200 bg-slate-50 shadow-inner transition-transform duration-500 ${isNavBottomVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+        <div className={`md:hidden fixed -bottom-24 left-0 z-50 w-full h-20 b-slate-50 border-t-2 rounded-t-xl border-gray-200 bg-slate-50 shadow-inner transition-transform duration-300 ${isNavBottomVisible ? 'translate-y-0' : '-translate-y-full'}`}>
             <div className="grid h-full max-w-full grid-cols-3 mx-auto text-sm">
                 <Link href='/' className="inline-flex flex-col items-center justify-center border-gray-200 border-x hover:bg-gray-200">
                     <span className="flex items-center">

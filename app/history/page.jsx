@@ -4,6 +4,7 @@ import HistoryCard from '../../components/HistoryCard';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const History = () => {
     const [allOrders, setAllOrders] = useState([]);
@@ -52,7 +53,8 @@ const History = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <main className="flex-grow">
-                <div className='flex flex-col p-5 md:p-20 mt-32 md:mt-20'>
+                <div className='flex flex-col p-5 md:p-20 mt-28 md:mt-20'>
+                    <Link href='/'><p className='text-blue-600 underline'>Go back to Homepage</p></Link>
                     {allOrders.length > 0 ? (
                         <>
                         <h1 className='text-xl'>Order History</h1>

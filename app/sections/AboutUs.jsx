@@ -7,7 +7,6 @@ const AboutUs = () => {
             <div key={items.title}>
             <h3 className="text-slate-100 text-xl font-satoshi font-semibold">{items.title}</h3>
             {items.description != "" && <p className="text-slate-100 font-satoshi">{items.description}</p>}
-            {console.log(items.moreDetail)}
             <ul>
                 {items.moreDetail && items.moreDetail.length > 0 ? (
                 items.moreDetail.map((item) => (
