@@ -18,8 +18,6 @@ const Cart = () => {
         }
     }, []);
 
-    console.log(cartItemsFromDb);
-
     const handleCheckout = () => {
         setCheckOut(true);
     }
@@ -68,10 +66,15 @@ const Cart = () => {
         }
     };
     
-    const handleDecrementQuantity = (id) => {
+    const handleDecrementQuantity = async(id) => {
         const item = cartItemsFromDb.find(item => item.id === id);
         if (item) {
-            updateQuantityInDb(session.user.email ,id, Math.max(0, item.quantity - 1));
+            try {
+                await updateQuantityInDb(session.user.email ,id, Math.max(0, item.quantity - 1));
+                console.log('Item quantity updated');
+            } catch (error) {
+                console.error('Error removing item from cart: ', error);
+            }
         }
     };
     

@@ -68,12 +68,15 @@ export const CartProvider = ({ children }) => {
             if (response.ok) {
                 console.log('Item added to cart DB');
                 fetchItems(userEmail);
+                return { ok: true };  // Return a result indicating success
             } else {
                 const errorText = await response.text();
                 console.log('Failed adding item to cart DB:', errorText);
+                return { ok: false };  // Return a result indicating failure
             }
         } catch (error) {
             console.log('An error occurred when adding item to cart DB:', error);
+            return { ok: false };  // Return a result indicating failure
         }
     };
 

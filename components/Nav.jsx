@@ -64,7 +64,7 @@ const Nav = () => {
 
     return (
         <>
-        <div className={`fixed z-20 top-0 left-0 w-full shadow-md bg-slate-50 md:px-20 px-7 transition-transform duration-500 ${isNavVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+        <div className={`fixed z-20 top-0 left-0 w-full shadow-md bg-slate-50 md:px-20 px-7 transition-transform duration-500 ${isNavVisible ? 'translate-y-0' : '-translate-y-20'}`}>
             <div className="md:flex items-center justify-between py-4 bg-slate-50">
                 <div className="font-bold text-2xl cursor-pointer flex items-center font-satoshi text-gray-800 w-[150px]">
                     <a href="/" className="flex justify-center items-center text-xl font-semibold pr-80">

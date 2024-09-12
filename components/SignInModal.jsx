@@ -108,7 +108,7 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50 mt-30 md:mt-10">
             <div className="fixed inset-0 bg-gray-900 opacity-50" onClick={onClose}></div>
-            <div className="relative bg-white p-8 rounded-lg shadow-lg h-[600px] w-[400px] max-w-md mx-auto">
+            <div className={`relative bg-white p-8 rounded-lg shadow-lg h-[600px] w-[400px] max-w-md mx-auto ${loading ? 'opacity-90 cursor-not-allowed' : ''}`} disabled={loading}>
                 <button
                 onClick={onClose}
                 className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl"
@@ -121,6 +121,12 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
                     <div>
                         <h1 className='text-xl font-semibold'>Sign in</h1>
                     </div>
+
+                    {loading && 
+                        <div className="absolute top-60 left-[150px] z-10">
+                            <img src="/assets/icons/loading.svg" alt="Loading" width={100} height={100} />
+                        </div>
+                    }
 
                     <form onSubmit={handleLogin} className='flex flex-col mt-4'>
                         <label className='pb-2'>Email: </label>

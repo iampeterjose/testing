@@ -11,6 +11,7 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
     const { data: session } = useSession();
     const [providers, setProviders] = useState(null);
     const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const setUpProviders = async () => {
@@ -21,11 +22,28 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
         setUpProviders();
     }, []);
 
-    const handleAdd = () => {
+    const handleAdd = async() => {
         if (session) {
+            setIsLoading(true);
+            console.log("Loading started...");
             const userEmail = session?.user.email;
             const item = { id: parseInt(id, 10), title, price, quantity: parseInt(quantity, 10), image };
-            addItemToDb(userEmail, item);
+            try {
+                const result = await addItemToDb(userEmail, item);
+                console.log('Result: ', result);
+                if(!result.ok){
+                    alert('Failed to add item');
+                }
+                else{
+                    alert('Item added to cart');
+                    handleClick();
+                }
+            } catch (error) {
+                console.log('An error occured during the process');
+            } finally {
+                setIsLoading(false);
+                console.log("Loading ended.");
+            }
 
         } else {
             setIsSignInModalOpen(true);
@@ -40,16 +58,18 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
         <>
         {/* Desktop screen */}
         <div 
-            className="hidden md:flex justify-center items-center flex-col w-full hover:cursor-pointer group hover:shadow-xl transition-shadow hover:bg-slate-100 duration-500">
+            className={`hidden md:flex justify-center items-center flex-col w-full hover:cursor-pointer group hover:shadow-xl transition-shadow hover:bg-slate-100 duration-500 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={isLoading}
+        >
             <div className="relative group flex-shrink-0">
                 <img 
                     src={image} 
                     alt={title} 
                     className="w-[280px] h-[280px] rounded-md"
                 />
-                <div className="flex justify-between bg-slate-100 rounded-t-md w-full absolute bottom-0 p-2 opacity-0 group-hover:opacity-90 transition-opacity">
+                <div className="flex justify-between bg-slate-100 rounded-t-md w-full absolute bottom-0 p-2 transform -translate-x-10 opacity-0 group-hover:translate-x-0 group-hover:opacity-90 transition-transform duration-500 ease-out">
                     <button 
-                        className="bg-blue-700 text-white py-2 px-4 w-[150px] md:w-[100px] rounded-md"
+                        className={`bg-blue-700 text-white py-2 px-4 w-[150px] md:w-[100px] rounded-md`}
                         onClick={handleAdd}
                     >
                         Add
@@ -73,7 +93,8 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
 
         {/* Mobile screen */}
         <div 
-            className="flex md:hidden flex-col border-b-2 hover:cursor-pointer group hover:bg-slate-100 duration-500"
+            className={`flex md:hidden flex-col border-b-2 hover:cursor-pointer group hover:bg-slate-100 duration-500 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={isLoading}
         >
             <div onClick={handleClick}>
                 <div className="flex justify-between items-center p-2">
@@ -91,24 +112,24 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
                 </div>
             </div>
             <div 
-                className={`flex justify-between p-2 transition-opacity duration-500 ${isActive ? 'block' : 'hidden'}`}
-
+                className={`flex justify-between px-2 my-2 transition-all duration-500 ease-in-out overflow-hidden ${isActive ? 'max-h-[200px]' : 'max-h-0'}`}
+                style={{ maxHeight: isActive ? '200px' : '0' }}
             >
-                    <button 
-                        className="bg-blue-500 text-white py-2 px-4 w-[180px] rounded-md"
-                        onClick={handleAdd}
-                    >
-                        Add
-                    </button>
-                    <span>
-                        Qty: &nbsp;
-                        <input 
-                            type="number"  
-                            value={quantity}
-                            onChange={(e) => setQuantity(e.target.value)}
-                            className="border-2 rounded-md p-2 w-20"
-                        />
-                    </span>
+                <button 
+                    className={`bg-blue-500 text-white py-2 px-4 w-[180px] rounded-md `}
+                    onClick={handleAdd}
+                >
+                    Add
+                </button>
+                <span>
+                    Qty: &nbsp;
+                    <input 
+                        type="number"  
+                        value={quantity}
+                        onChange={(e) => setQuantity(e.target.value)}
+                        className="border-2 rounded-md p-2 w-20"
+                    />
+                </span>
             </div>
         </div>
         {isSignInModalOpen && <SignInModal isOpen={isSignInModalOpen} onClose={handleSignInModalClose} providers={providers} />}
