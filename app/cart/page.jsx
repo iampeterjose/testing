@@ -35,6 +35,7 @@ const Cart = () => {
                 body: JSON.stringify({
                     creator: session.user.email,
                     orders: cartItemsFromDb,
+                    price: grandTotal,
                     orderId: orderId,
                 }),
             });
@@ -138,7 +139,7 @@ const Cart = () => {
                                     <tr>
                                         <th>Item</th>
                                         <th>Price</th>
-                                        <th>Quantity</th>
+                                        <th>Qty</th>
                                         <th>Amount</th>
                                     </tr>
                                 </thead>

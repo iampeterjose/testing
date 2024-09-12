@@ -7,7 +7,12 @@ const Products = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSetSearchQuery] = useState('');
-  const [filteredCoffeeData, setFilteredCoffeeData] = useState([]);
+  const [filteredCoffeeData, setFilteredCoffeeData] = useState([]);    
+  const [activeId, setActiveId] = useState(null);
+
+  const handleClick = (clickedId) => {
+      setActiveId(prevId => prevId === clickedId ? null : clickedId);
+  };
 
   useEffect(() => {
     const fetchCoffeeData = async () => {
@@ -70,6 +75,8 @@ const Products = () => {
             description="coffee"
             price={(coffee.price).toFixed(2)}
             id={coffee.id}
+            isActive={activeId === coffee.id}
+            handleClick={() => handleClick(coffee.id)}
           />
         ))}
       </div>

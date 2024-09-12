@@ -111,9 +111,9 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
             <div className="relative bg-white p-8 rounded-lg shadow-lg h-[600px] w-[400px] max-w-md mx-auto">
                 <button
                 onClick={onClose}
-                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl"
                 >
-                X
+                &times;
                 </button>
                 {/* Sign in display */}
                 {isSignIn ? (

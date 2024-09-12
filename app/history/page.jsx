@@ -51,13 +51,13 @@ const History = () => {
 
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen md:items-center">
             <main className="flex-grow">
-                <div className='flex flex-col p-5 md:p-20 mt-28 md:mt-20'>
+                <div className='flex flex-col p-5 md:p-20 mt-28 md:mt-20 w-full md:w-[800px]'>
                     <Link href='/'><p className='text-blue-600 underline'>Go back to Homepage</p></Link>
                     {allOrders.length > 0 ? (
                         <>
-                        <h1 className='text-xl'>Order History</h1>
+                        <h1 className='text-xl mb-4'>Order History</h1>
                         {allOrders.map((orders, index) => (
                             <HistoryCard 
                             key={index} 

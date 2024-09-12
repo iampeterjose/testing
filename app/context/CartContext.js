@@ -148,7 +148,7 @@ export const CartProvider = ({ children }) => {
 
     const totalAmount = cartItemsFromDb.reduce((total, item) => item.price * item.quantity + total, 0);
     const vat = totalAmount * 0.12;
-    const grandTotal = (totalAmount + vat).toFixed(2);
+    const grandTotal = Number((totalAmount + vat)).toFixed(2);
 
     const value = useMemo(() => ({getTotalQuantity, handleClearCart, addItemToDb, updateQuantityInDb, totalAmount, grandTotal, vat, fetchItems, cartItemsFromDb, cartLoading}), [cartItemsFromDb]);
 

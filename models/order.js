@@ -11,6 +11,10 @@ const OrderSchema = new Schema({
         of: Schema.Types.Mixed,
         required: true,
     }],
+    price: {
+        type: Number,
+        required: true,
+    },
     orderId: {
         type: String,
         required: true,
