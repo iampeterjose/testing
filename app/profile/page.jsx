@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react"
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { IoPersonOutline } from "react-icons/io5";
 
 const page = () => {
     const { data:session } = useSession();
@@ -24,13 +25,17 @@ const page = () => {
                     <div className="w-full">
                     <Link href='/'><p className='text-blue-600 underline'>Go back to Homepage</p></Link>
                         <h1 className="text-2xl text-slate-700">My Profile</h1>
-                        <img 
-                            src={!session?.user.image ? '/assets/icons/profile.svg' : session.user.image} 
+                        {!session?.user.image ? (
+                            <IoPersonOutline size={100} className="mt-6" />
+                        ) : (
+                            <img 
+                            src={session.user.image} 
                             alt="Profile Picture" 
                             width={100} 
                             height={100} 
                             className="mt-6 rounded-full"
                         />
+                        )}
                         <p className="mt-4 text-md text-slate-700">Email: {session?.user.email}</p>
                     </div>
                 </div>

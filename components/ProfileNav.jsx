@@ -1,5 +1,6 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";   
+import { IoPersonOutline } from "react-icons/io5";
 
 const ProfileNav = ({ toggleNav, isOpen }) => {
     const { data: session } = useSession();
@@ -25,7 +26,11 @@ const ProfileNav = ({ toggleNav, isOpen }) => {
             <ul className="text-slate-900">
                 <Link href='/profile'>
                     <li className="p-4 hover:text-slate-50 hover:bg-coconut text-md border-b-2" onClick={handleNavigation}>
-                        <img src={!session.user.image ? '/assets/icons/profile.svg' : session.user.image} alt="Profile Picture" height={50} width={50} className="border-2 border-coconut rounded-full my-2" />
+                        {!session.user.image ? (
+                            <IoPersonOutline size={50} className="my-3" />
+                        ) : (
+                            <img src={session.user.image} alt="Profile Picture" height={50} width={50} className="border-2 border-slate-300 rounded-full my-3" />
+                        )}
                         <p>{session.user.email}</p>
                     </li>
                 </Link>

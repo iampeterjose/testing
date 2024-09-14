@@ -7,10 +7,10 @@ const Footer = () => {
       <div className="flex justify-between items-start gap-20 flex-wrap mx-lg:flex-col border-b-2 pb-20">
         <div className="flex flex-col items-start">
           <a href="/"
-            className="flex justify-center items-center text-2xl font-satoshi font-semibold pr-5 text-slate-100"
+            className="flex justify-center items-center text-xl font-satoshi font-semibold pr-5 text-slate-100"
           >
             <img 
-            src="/assets/icons/coffeecup.png" 
+            src="/assets/images/coffeeimage.png" 
             alt="Logo"
             width='40' 
             height='40' 

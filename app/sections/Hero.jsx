@@ -1,3 +1,5 @@
+import { TiLocationArrowOutline } from "react-icons/ti";
+
 const Hero = () => {
   return (
     <section
@@ -11,8 +13,9 @@ const Hero = () => {
         </h1>
         <p className="font-montserrat text-slate-600 text-lg leading-8 mt-3 mb-4 sm:max-w-sm">Discover the rich and aromatic world of coffee with TestApp, your ultimate destination for premium blends and expertly crafted brews.
         </p>
-        <a href='#products' className="font-satoshi text-lg leading-none bg-orange-600 rounded-full text-white border-orange-600 px-7 py-4">
-          Order now
+        <a href='#products' className="flex items-center font-satoshi text-lg leading-none bg-orange-600 rounded-full text-white border-orange-600 px-7 py-4">
+          Order now&nbsp;
+          <TiLocationArrowOutline />
         </a>
       </div>
       <div>

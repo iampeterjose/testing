@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
 import SignInModal from "./SignInModal";
 import { useCart } from "../app/context/CartContext";
+import { FiShoppingBag } from "react-icons/fi";
 
 const Nav = () => {
     const { getTotalQuantity } = useCart();
@@ -68,8 +69,8 @@ const Nav = () => {
             <div className="md:flex items-center justify-between py-4 bg-slate-50">
                 <div className="font-bold text-2xl cursor-pointer flex items-center font-satoshi text-gray-800 w-[150px]">
                     <a href="/" className="flex justify-center items-center text-xl font-semibold pr-80">
-                        <img src="/assets/icons/coffeecup.png" alt="Logo" width={50} height={50} /> 
-                        <p className="text-2xl">TestApp</p>
+                        <img src="/assets/images/coffeeimage.png" alt="Logo" width={50} height={50} /> 
+                        <p className="text-xl">TestApp</p>
                     </a>
                 </div>
 
@@ -87,7 +88,7 @@ const Nav = () => {
                         <img 
                             src={!session.user.image ? '/assets/icons/profile.svg' : session.user.image} 
                             alt="NavProfile" width={40} height={40} 
-                            className="hidden md:flex ml-2 p-1 border-2 border-coconut rounded-full hover:cursor-pointer"
+                            className="hidden md:flex ml-2 p-1 border-2 border-coconut rounded-full hover:bg-coconut hover:cursor-pointer"
                             onClick={toggleDropdown}
                         />
                         {dropdown && 
@@ -129,10 +130,10 @@ const Nav = () => {
             {session?.user &&
                 <div className="hidden md:flex justify-end mb-2">
                     <Link href='/cart' className="flex">
-                        <span className="text-slate-700 text-sm">My Order &nbsp;</span>
-                        <img src="/assets/icons/bag.svg" alt="Bag" width={20} height={20} />
+                        <span className="text-slate-700 text-sm font-semibold">My Order &nbsp;</span>
+                        <FiShoppingBag size={20} />
                         {getTotalQuantity() > 0 &&
-                            <span className="text-sm">({getTotalQuantity()})</span>
+                            <span className="text-slate-700 text-sm font-semibold">({getTotalQuantity()})</span>
                         }
                     </Link>
                 </div>

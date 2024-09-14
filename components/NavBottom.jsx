@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import ProfileNav from "./ProfileNav";
 import { useSession } from "next-auth/react";
+import { GoHome } from "react-icons/go";
+import { FiShoppingBag } from "react-icons/fi";
+import { IoPersonOutline } from "react-icons/io5";
+
 
 const NavBottom = () => {
     const { getTotalQuantity } = useCart();
@@ -63,13 +67,13 @@ const NavBottom = () => {
             <div className="grid h-full max-w-full grid-cols-3 mx-auto text-sm">
                 <Link href='/' className="inline-flex flex-col items-center justify-center border-gray-200 border-x hover:bg-gray-200">
                     <span className="flex items-center">
-                        <img src="/assets/icons/home.svg" alt="Home" width={20} height={20} />
+                        <GoHome size={20} />
                     </span>
                     <span>Home</span>
                 </Link>
                 <Link href='/cart'className="inline-flex flex-col items-center justify-center border-gray-200 border-x hover:bg-gray-200">
                     <span className="flex items-center"> 
-                        <img src="/assets/icons/bag.svg" alt="Bag" width={20} height={20} />
+                        <FiShoppingBag size={20} />
                         {getTotalQuantity() > 0 ? (
                             <span className="text-sm">({getTotalQuantity()})</span>
                         ) : (
@@ -80,7 +84,11 @@ const NavBottom = () => {
                 </Link>
                 <p className="inline-flex flex-col items-center justify-center border-gray-200 border-x hover:bg-gray-200" onClick={toggleNav}>
                     <span className="flex items-center">
-                        <img src={!session.user.image ? '/assets/icons/profile.svg' : session.user.image} alt="Profile" width={20} height={20} className="rounded-full" />
+                        {!session.user.image ? (
+                            <IoPersonOutline size={20} />
+                        ) : (
+                            <img src={session.user.image} alt="Profile" width={20} height={20} className="rounded-full" />
+                        )}
                     </span>
                     <span>Profile</span>
                 </p>

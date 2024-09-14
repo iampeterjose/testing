@@ -1,7 +1,6 @@
 'use client';
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-import { useCart } from "../app/context/CartContext";
 
 
 const SignInModal = ({ isOpen, onClose, providers }) => {
@@ -11,7 +10,6 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
     const [password2, setPassword2] = useState('');
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(false);
-    const { toggleMenu } = useCart();
 
     const handleToggle = () => {
         setIsSignIn(prev => !prev);
@@ -23,29 +21,34 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
 
     const handleLogin = async(e) => {
         e.preventDefault();
-        setLoading(true);
+        if(!email || !password){
+            alert('All fields required!');
+            return;
+        }
+        else {   
+            setLoading(true);
+            try {
+                const result = await signIn('credentials', {
+                    redirect: false,
+                    email,
+                    password
+                });
 
-        try {
-            const result = await signIn('credentials', {
-                redirect: false,
-                email,
-                password
-            });
-
-            if(result.error){
-                console.log('Error signing in: ',result.error);
-                alert('Sign in failed. Please check your email and password');
+                if(result.error){
+                    console.log('Error signing in: ',result.error);
+                    alert('Sign in failed. Please check your email and password');
+                }
+                else{
+                    alert('Signed in successfully');
+                    onClose();
+                    toggleMenu();
+                }
+            } catch (error) {
+                console.log('Error during sign in:', error);
+                alert('An error occurred during sign in.');
+            } finally {
+                setLoading(false);  
             }
-            else{
-                alert('Signed in successfully');
-                onClose();
-                toggleMenu();
-            }
-        } catch (error) {
-            console.log('Error during sign in:', error);
-            alert('An error occurred during sign in.');
-        } finally {
-            setLoading(false);  
         }
     }
 
@@ -56,7 +59,7 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
             alert(`All fields are required!`);
             return;
         }
-        else {
+        else {   
             if(password != password2){
                 setError(true);
                 alert(`Password not match!`);
@@ -115,18 +118,19 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
                 >
                 &times;
                 </button>
+
+                {loading && 
+                    <div className="absolute top-60 left-[150px] z-10">
+                        <img src="/assets/icons/loading.svg" alt="Loading" width={100} height={100} />
+                    </div>
+                }
+
                 {/* Sign in display */}
                 {isSignIn ? (
                     <>
                     <div>
                         <h1 className='text-xl font-semibold'>Sign in</h1>
                     </div>
-
-                    {loading && 
-                        <div className="absolute top-60 left-[150px] z-10">
-                            <img src="/assets/icons/loading.svg" alt="Loading" width={100} height={100} />
-                        </div>
-                    }
 
                     <form onSubmit={handleLogin} className='flex flex-col mt-4'>
                         <label className='pb-2'>Email: </label>
@@ -150,7 +154,7 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
                     </form>
                     
                     <div className='flex flex-col mt-32'>
-                        <span className="flex justify-center items-center">Don't have an account yet? &nbsp;<button href='#' className='hover:underline underline-offset-4' onClick={handleToggle}>Sign Up</button></span>
+                        <span className="flex justify-center items-center">Don't have an account yet? &nbsp;<button href='#' className='underline' onClick={handleToggle}>Sign Up</button></span>
                         {providers && 
                             Object.values(providers)
                             .filter(provider => provider.name === "Google")
@@ -197,7 +201,7 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
                     </form>
                     
                     <div className='flex flex-col mt-8'>
-                    <span className="flex justify-center items-center">Already have an account? &nbsp;<button href='#' className='hover:underline underline-offset-4' onClick={handleToggle}>Sign In</button></span>
+                    <span className="flex justify-center items-center">Already have an account? &nbsp;<button href='#' className='underline' onClick={handleToggle}>Sign In</button></span>
                         {providers && 
                             Object.values(providers)
                             .filter(provider => provider.name === "Google")

@@ -1,9 +1,9 @@
 "use client";
 import { useSession, getProviders } from "next-auth/react";
-import Modal from "./Modal";
 import { useState, useEffect } from "react";
 import { useCart } from "../app/context/CartContext";
 import SignInModal from "./SignInModal";
+import { GrAdd } from "react-icons/gr";
 
 const CoffeeCard = ({ title, image, description, id, price, isActive, handleClick }) => {
     const [quantity, setQuantity] = useState(1);
@@ -67,20 +67,21 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
                     alt={title} 
                     className="w-[280px] h-[280px] rounded-md"
                 />
-                <div className="flex justify-between bg-slate-100 rounded-t-md w-full absolute bottom-0 p-2 transform -translate-x-10 opacity-0 group-hover:translate-x-0 group-hover:opacity-90 transition-transform duration-500 ease-out">
+                <div className="flex justify-between bg-slate-100 rounded-t-md w-full absolute bottom-0 p-2 transform translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-90 transition-transform duration-500 ease-out">
                     <button 
-                        className={`bg-blue-700 text-white py-2 px-4 w-[150px] md:w-[100px] rounded-md`}
+                        className={`border-2 border-blue-700 text-slate-900 hover:bg-blue-700 hover:text-white py-2 px-2 w-[90px] rounded-full flex justify-center items-center`}
                         onClick={handleAdd}
                     >
-                        Add
+                        Add &nbsp;
+                        <GrAdd />
                     </button>
-                    <span>
+                    <span className="flex justify-center items-center border-2 border-slate-500 rounded-full px-4">
                         Qty: &nbsp;
                         <input 
-                            type="number" 
+                            type="number"  
                             value={quantity}
                             onChange={(e) => setQuantity(e.target.value)}
-                            className="border-2 rounded-md p-2 w-20"
+                            className="border-2 rounded-md p-2 w-16"
                         />
                     </span>
                 </div>
@@ -112,22 +113,23 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
                 </div>
             </div>
             <div 
-                className={`flex justify-between px-2 my-2 transition-all duration-500 ease-in-out overflow-hidden ${isActive ? 'max-h-[200px]' : 'max-h-0'}`}
+                className={`flex justify-between px-2 mb-2 overflow-hidden ${isActive ? 'max-h-[200px]' : 'max-h-0'}`}
                 style={{ maxHeight: isActive ? '200px' : '0' }}
             >
                 <button 
-                    className={`bg-blue-500 text-white py-2 px-4 w-[180px] rounded-md `}
+                    className={`border-2 border-blue-500 text-slate-900 hover:bg-blue-500 hover:text-white py-2 px-4 w-[150px] rounded-full flex justify-center items-center`}
                     onClick={handleAdd}
                 >
-                    Add
+                    Add &nbsp;
+                    <GrAdd />
                 </button>
-                <span>
+                <span className="flex justify-center items-center border-2 border-slate-300 rounded-full px-4">
                     Qty: &nbsp;
                     <input 
                         type="number"  
                         value={quantity}
                         onChange={(e) => setQuantity(e.target.value)}
-                        className="border-2 rounded-md p-2 w-20"
+                        className="border-2 rounded-md p-2 w-16"
                     />
                 </span>
             </div>

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Paypal from '../../components/Paypal';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { FiMinus, FiPlus } from "react-icons/fi";
 
 const Cart = () => {
     const { handleClearCart, updateQuantityInDb, totalAmount, grandTotal, vat, cartItemsFromDb, cartLoading } = useCart();
@@ -95,14 +96,18 @@ const Cart = () => {
                                     {cartItemsFromDb.map((item) => (
                                         <li key={item.id} className='my-2 border-b-2 border-b-slate-200 flex justify-between items-center p-2'>
                                             <div className='flex'>
-                                                <button hidden={checkOut} type="button" className="p-2 w-8 h-14 my-6 text-lg" onClick={() => handleDecrementQuantity(item.id)}>-</button>
+                                                <button hidden={checkOut} type="button" className="p-2 w-8 h-14 my-6 text-lg" onClick={() => handleDecrementQuantity(item.id)}>
+                                                    <FiMinus />
+                                                </button>
                                                 <input type="text" 
                                                     disabled={checkOut}
                                                     value={item.quantity}
                                                     className='w-12 h-14 border-b-2 px-3 py-2 sm:text-base border-gray-300 my-6 pl-4'
                                                     onChange={(e) => handleQuantityChange(item.id, e)}
                                                 />
-                                                <button hidden={checkOut} type="button" className="p-2 w-8 h-14 my-6 mr-4  text-lg" onClick={() => handleIncrementQuantity(item.id)}>+</button>
+                                                <button hidden={checkOut} type="button" className="p-2 w-8 h-14 my-6 mr-4  text-lg" onClick={() => handleIncrementQuantity(item.id)}>
+                                                    <FiPlus />
+                                                </button>
                                                 
                                                 <img 
                                                     src={item.image} 
@@ -128,7 +133,7 @@ const Cart = () => {
                         {cartItemsFromDb.length > 0 && !checkOut && 
                             <button
                                 onClick={()=> handleClearCart(session.user.email)}
-                                className="mt-4 px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                                className="mt-4 px-6 py-4 bg-red-500 text-white rounded-md hover:bg-red-600"
                             >
                                 Clear Cart
                             </button>
@@ -136,9 +141,9 @@ const Cart = () => {
                     </div>
                     {cartItemsFromDb.length > 0 && 
                         <div className='w-full mt-10 md:mt-0 md:p-20'>
-                            <h2 className='text-lg'>Order Summary</h2>
-                            <table className='table-auto w-full my-10 md:mt-2'>
-                                <thead className='text-left text-md'>
+                            <h2 className='text-xl'>Order Summary</h2>
+                            <table className='table-auto w-full my-4 md:mt-2 border-separate border-spacing-y-4'>
+                                <thead className='text-left text-lg bg-gray-100 border-t-2 border-solid border-gray-800'>
                                     <tr>
                                         <th>Item</th>
                                         <th>Price</th>
@@ -155,7 +160,7 @@ const Cart = () => {
                                             <td>${(cart.price * cart.quantity).toFixed(2)}</td>
                                         </tr>
                                     ))}
-                                    <tr className='border-t-2 border-solid'>
+                                    <tr className='bg-gray-100 border-t-2 border-solid border-gray-800'>
                                         <td>Total</td>
                                         <td></td>
                                         <td></td>
@@ -167,7 +172,7 @@ const Cart = () => {
                                         <td></td>
                                         <td>${vat.toFixed(2)}</td>
                                     </tr>
-                                    <tr className='font-bold border-double border-t-8'>
+                                    <tr className='bg-gray-100 font-bold border-t-8 border-double border-gray-800'>
                                         <td>Grand Total</td>
                                         <td></td>
                                         <td></td>
@@ -175,18 +180,18 @@ const Cart = () => {
                                     </tr>
                                 </tbody>
                             </table>
-
+                                    
                             {checkOut ? (
                                 <>
                                 <Paypal grandTotal={grandTotal} onPaymentSuccess={handlePaymentSuccess} />
                                 <button 
-                                    className="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-blue-600 w-full mt-6"
+                                    className="px-6 py-4 bg-orange-500 text-white rounded-md hover:bg-blue-600 w-full mt-6"
                                     onClick={cancelCheckout}
                                 >Cancel Checkout</button>
                                 </>
                             ) : (
                                 <button 
-                                    className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 w-full"
+                                    className="px-6 py-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 w-full"
                                     onClick={handleCheckout}
                                 >Checkout
                                 </button>
