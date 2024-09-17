@@ -67,13 +67,13 @@ const NavBottom = () => {
             <div className="grid h-full max-w-full grid-cols-3 mx-auto text-sm">
                 <Link href='/' className="inline-flex flex-col items-center justify-center border-gray-200 border-x hover:bg-gray-200">
                     <span className="flex items-center">
-                        <GoHome size={20} />
+                        <GoHome size={25} />
                     </span>
                     <span>Home</span>
                 </Link>
                 <Link href='/cart'className="inline-flex flex-col items-center justify-center border-gray-200 border-x hover:bg-gray-200">
                     <span className="flex items-center"> 
-                        <FiShoppingBag size={20} />
+                        <FiShoppingBag size={23} />
                         {getTotalQuantity() > 0 ? (
                             <span className="text-sm">({getTotalQuantity()})</span>
                         ) : (
@@ -85,9 +85,9 @@ const NavBottom = () => {
                 <p className="inline-flex flex-col items-center justify-center border-gray-200 border-x hover:bg-gray-200" onClick={toggleNav}>
                     <span className="flex items-center">
                         {!session.user.image ? (
-                            <IoPersonOutline size={20} />
+                            <IoPersonOutline size={25} />
                         ) : (
-                            <img src={session.user.image} alt="Profile" width={20} height={20} className="rounded-full" />
+                            <img src={session.user.image} alt="Profile" width={25} height={25} className="rounded-full" />
                         )}
                     </span>
                     <span>Profile</span>
