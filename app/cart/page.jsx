@@ -99,7 +99,7 @@ const Cart = () => {
                                                     <FiMinus />
                                                 </button>
                                                 <input type="text" 
-                                                    disabled={checkOut}
+                                                    disabled
                                                     value={item.quantity}
                                                     className='w-12 h-14 border-b-2 px-3 py-2 sm:text-base border-gray-300 my-6 pl-4'
                                                     onChange={(e) => handleQuantityChange(item.id, e)}
