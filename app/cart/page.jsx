@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Paypal from '../../components/Paypal';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { FiMinus, FiPlus } from "react-icons/fi";
+import { FiMinus, FiPlus, FiShoppingBag } from "react-icons/fi";
 
 const Cart = () => {
     const { handleClearCart, updateQuantityInDb, totalAmount, grandTotal, vat, cartItemsFromDb, cartLoading } = useCart();
@@ -88,7 +88,6 @@ const Cart = () => {
             <main className='flex-grow'>
                 <div className='flex flex-col md:flex-row p-5 md:p-20 mt-28 md:mt-20 '>
                     <div className='w-full'>
-                    <Link href='/'><p className='text-blue-600 underline'>Go back to Homepage</p></Link>
                         <h1 className='text-2xl'>Cart</h1>
                         {cartItemsFromDb.length > 0 ? (
                             <form action="">
@@ -126,17 +125,21 @@ const Cart = () => {
                         ) : (
                             <>
                             <p>No items in the cart</p>
+                            <Link href='/#products'><p className='text-blue-600 my-4 flex items-end'>Order now &nbsp; <FiShoppingBag size={25} /> </p></Link>
                             
                             {cartLoading && <img src="/assets/icons/loading.svg" alt="Loading" width={40} height={40}/>}
                             </>
                         )}
                         {cartItemsFromDb.length > 0 && !checkOut && 
+                        <>
+                            <Link href='/#products'><p className='text-blue-600 underline my-4'>Add more...</p></Link>
                             <button
                                 onClick={()=> handleClearCart(session.user.email)}
                                 className="mt-4 px-6 py-4 bg-red-500 text-white rounded-md hover:bg-red-600"
                             >
                                 Clear Cart
                             </button>
+                        </>
                         }
                     </div>
                     {cartItemsFromDb.length > 0 && 

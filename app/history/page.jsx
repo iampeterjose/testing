@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { GoHome } from 'react-icons/go';
 
 const History = () => {
     const [allOrders, setAllOrders] = useState([]);
@@ -54,7 +55,7 @@ const History = () => {
         <div className="flex flex-col min-h-screen md:items-center">
             <main className="flex-grow">
                 <div className='flex flex-col p-5 md:p-20 mt-28 md:mt-20 w-full md:w-[800px]'>
-                    <Link href='/'><p className='text-blue-600 underline'>Go back to Homepage</p></Link>
+                    <Link href='/'><p className='text-blue-600 underline mb-4 flex'><GoHome size={25} /> Home</p></Link>
                     {allOrders.length > 0 ? (
                         <>
                         <h1 className='text-xl mb-4'>Order History</h1>

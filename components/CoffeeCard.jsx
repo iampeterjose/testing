@@ -1,9 +1,10 @@
-"use client";
+    "use client";
 import { useSession, getProviders } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useCart } from "../app/context/CartContext";
 import SignInModal from "./SignInModal";
 import { GrAdd } from "react-icons/gr";
+import { FiShoppingBag } from "react-icons/fi";
 
 const CoffeeCard = ({ title, image, description, id, price, isActive, handleClick }) => {
     const [quantity, setQuantity] = useState(1);
@@ -65,15 +66,15 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
                 <img 
                     src={image} 
                     alt={title} 
-                    className="w-[280px] h-[280px] rounded-md"
+                    className="w-[280px] lg:h-[280px] md:h-[200px] rounded-md"
                 />
-                <div className="flex justify-between bg-slate-100 rounded-t-md w-full absolute bottom-0 p-2 transform translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-90 transition-transform duration-500 ease-out">
+                <div className="flex justify-between bg-slate-100 lg:text-sm md:text-xs rounded-t-md w-full absolute bottom-0 p-2 transform translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-90 transition-transform duration-500 ease-out">
                     <button 
-                        className={`border-2 border-blue-700 text-slate-900 hover:bg-blue-700 hover:text-white py-2 px-2 w-[90px] rounded-full flex justify-center items-center`}
+                        className={`border-2 border-blue-700 text-slate-900 hover:bg-blue-700 hover:text-white py-1 px-2 w-30 rounded-full flex justify-center items-center`}
                         onClick={handleAdd}
                     >
                         Add &nbsp;
-                        <GrAdd />
+                        <FiShoppingBag size={10} />
                     </button>
                     <span className="flex justify-center items-center border-2 border-slate-500 rounded-full px-4">
                         Qty: &nbsp;
@@ -81,7 +82,7 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
                             type="number"  
                             value={quantity}
                             onChange={(e) => setQuantity(e.target.value)}
-                            className="border-2 rounded-md p-2 w-16"
+                            className="border-2 rounded-md py-1 px-2 w-12"
                         />
                     </span>
                 </div>
@@ -113,17 +114,17 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
                 </div>
             </div>
             <div 
-                className={`flex justify-between px-2 mb-2 overflow-hidden ${isActive ? 'max-h-[200px]' : 'max-h-0'}`}
+                className={`flex justify-between text-sm px-2 mb-2 overflow-hidden ${isActive ? 'max-h-[200px]' : 'max-h-0'}`}
                 style={{ maxHeight: isActive ? '200px' : '0' }}
             >
                 <button 
-                    className={`border-2 border-blue-500 text-slate-900 hover:bg-blue-500 hover:text-white py-2 px-4 w-[150px] rounded-full flex justify-center items-center`}
+                    className={`border-2 border-blue-500 text-slate-900 hover:bg-blue-500 hover:text-white py-2 px-4 w-30 rounded-full flex justify-center items-center`}
                     onClick={handleAdd}
                 >
                     Add &nbsp;
-                    <GrAdd />
+                    <FiShoppingBag />
                 </button>
-                <span className="flex justify-center items-center border-2 border-slate-300 rounded-full px-4">
+                <span className="flex justify-center items-center border-2 border-slate-500 rounded-full px-4">
                     Qty: &nbsp;
                     <input 
                         type="number"  

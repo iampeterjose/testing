@@ -66,7 +66,7 @@ const Products = () => {
           <div>Error: {error}</div>
         }
       </div>
-      <div className="mt-4 md:my-10 grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-1 md:gap-20">
+      <div className="mt-4 md:my-16 grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-1 md:gap-y-24 md:gap-x-4">
         {filteredCoffeeData.map((coffee) => (
           <CoffeeCard 
             key={coffee.id} 
