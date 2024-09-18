@@ -74,15 +74,15 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
                         onClick={handleAdd}
                     >
                         Add &nbsp;
-                        <FiShoppingBag size={10} />
+                        <FiShoppingBag />
                     </button>
-                    <span className="flex justify-center items-center">
+                    <span className="flex justify-center items-center text-slate-50">
                         Qty: &nbsp;
                         <input 
                             type="number"  
                             value={quantity}
                             onChange={(e) => setQuantity(e.target.value)}
-                            className="border-b-2 w-12 h-14 px-3 py-2 sm:text-base"
+                            className="border-b-2 w-14 h-14 px-3 py-2 sm:text-base text-black"
                         />
                     </span>
                 </div>

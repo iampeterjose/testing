@@ -1,6 +1,7 @@
 'use client';
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
 
 
 const SignInModal = ({ isOpen, onClose, providers }) => {
@@ -159,10 +160,12 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
                             Object.values(providers)
                             .filter(provider => provider.name === "Google")
                             .map((provider) => (
+                            
                             <button 
                                 key={provider.name}
-                                className='hover:underline underline-offset-4'
-                                onClick={() => signIn(provider.id)}>Sign in with {provider.name}</button>
+                                className="flex mt-2 p-2 gap-x-4 justify-center items-center border-2 bg-slate-100 text-slate-600"
+                                onClick={() => signIn(provider.id)}><FcGoogle size={25} /> Sign in with {provider.name}
+                            </button>
                             ))
                         }
                     </div>
@@ -208,8 +211,9 @@ const SignInModal = ({ isOpen, onClose, providers }) => {
                             .map((provider) => (
                             <button 
                                 key={provider.name}
-                                className='hover:underline underline-offset-4'
-                                onClick={() => signIn(provider.id)}>Sign in with {provider.name}</button>
+                                className="flex mt-2 p-2 gap-x-4 justify-center items-center border-2 bg-slate-100 text-slate-600"
+                                onClick={() => signIn(provider.id)}><FcGoogle size={25} /> Sign in with {provider.name}
+                            </button>
                             ))
                         }
                     </div>

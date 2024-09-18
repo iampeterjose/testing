@@ -55,7 +55,7 @@ const History = () => {
         <div className="flex flex-col min-h-screen md:items-center">
             <main className="flex-grow">
                 <div className='flex flex-col p-5 md:p-20 mt-28 md:mt-20 w-full md:w-[800px]'>
-                    <Link href='/'><p className='text-blue-600 mb-4 flex'><GoHome size={25} /> Home</p></Link>
+                    <Link href='/'><p className='text-blue-600 mb-4 flex items-end'><GoHome size={25} /> Home</p></Link>
                     {allOrders.length > 0 ? (
                         <>
                         <h1 className='text-xl mb-4'>Order History</h1>

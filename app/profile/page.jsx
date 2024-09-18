@@ -24,7 +24,7 @@ const page = () => {
             <main className='flex-grow'>
                 <div className='flex flex-col md:flex-row p-5 md:p-20 mt-28 md:mt-20 '>
                     <div className="w-full">
-                    <Link href='/'><p className='text-blue-600 mb-4 flex'><GoHome size={25} /> Home</p></Link>
+                    <Link href='/'><p className='text-blue-600 mb-4 flex items-end'><GoHome size={25} /> Home</p></Link>
                         <h1 className="text-2xl text-slate-700">My Profile</h1>
                         {!session?.user.image ? (
                             <IoPersonOutline size={100} className="mt-6" />
