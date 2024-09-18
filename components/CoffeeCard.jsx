@@ -68,9 +68,9 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
                     alt={title} 
                     className="w-[280px] lg:h-[280px] md:h-[200px] rounded-md"
                 />
-                <div className="flex justify-between bg-slate-100 rounded-t-md w-full absolute bottom-0 p-2 transform translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-90 transition-transform duration-500 ease-out">
+                <div className="flex justify-between bg-orange-500 rounded-t-md w-full absolute bottom-0 p-2 transform translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-90 transition-transform duration-500 ease-out">
                     <button 
-                        className={`border-2 border-blue-700 text-slate-900 hover:bg-blue-700 hover:text-white py-1 px-2 w-30 rounded-md flex justify-center items-center`}
+                        className={`border-2 bg-orange-600 text-slate-50 hover:bg-orange-700 py-1 px-2 w-30 rounded-md flex justify-center items-center`}
                         onClick={handleAdd}
                     >
                         Add &nbsp;
@@ -82,7 +82,7 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
                             type="number"  
                             value={quantity}
                             onChange={(e) => setQuantity(e.target.value)}
-                            className="border-2 rounded-md w-12 h-14 px-3 py-2 sm:text-base"
+                            className="border-b-2 w-12 h-14 px-3 py-2 sm:text-base"
                         />
                     </span>
                 </div>
@@ -118,7 +118,7 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
                 style={{ maxHeight: isActive ? '200px' : '0' }}
             >
                 <button 
-                    className={`border-2 border-blue-500 text-slate-900 hover:bg-blue-500 hover:text-white py-2 px-4 w-30 rounded-md flex justify-center items-center`}
+                    className={`border-2 bg-orange-600 text-slate-50 hover:bg-orange-700 py-2 px-4 w-30 rounded-md flex justify-center items-center`}
                     onClick={handleAdd}
                 >
                     Add &nbsp;
@@ -130,7 +130,7 @@ const CoffeeCard = ({ title, image, description, id, price, isActive, handleClic
                         type="number"  
                         value={quantity}
                         onChange={(e) => setQuantity(e.target.value)}
-                        className="border-2 rounded-md w-16 h-14 px-3 py-2 sm:text-base"
+                        className="border-b-2 w-16 h-14 px-3 py-2 sm:text-base"
                     />
                 </span>
             </div>
