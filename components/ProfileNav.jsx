@@ -1,5 +1,5 @@
 import { signOut, useSession } from "next-auth/react";
-import Link from "next/link";   
+import Link from "next/link";
 import { IoPersonOutline } from "react-icons/io5";
 
 const ProfileNav = ({ toggleNav, isOpen }) => {
@@ -11,49 +11,57 @@ const ProfileNav = ({ toggleNav, isOpen }) => {
 
     return (
         <>
+        {/* Side Drawer */}
         <div
-            className={`fixed top-0 left-0 h-full z-100 bg-slate-50 text-slate-900 duration-500 ease-in-out transition-transform transform ${
-            isOpen ? 'translate-x-0' : '-translate-x-full'
-            } w-64 z-50 shadow-xl`}
+            className={`fixed top-0 left-0 h-full w-72 z-50 bg-gradient-to-br from-orange-100 to-orange-50 text-orange-900 duration-500 ease-in-out transition-transform transform shadow-2xl rounded-r-3xl border-r-2 border-orange-200 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
         >
             <button
-            onClick={toggleNav}
-            className="absolute top-4 right-4 p-2 w-10 h-10"
+                onClick={toggleNav}
+                className="absolute top-4 right-4 p-2 w-10 h-10 rounded-full bg-orange-50 hover:bg-orange-200 transition"
+                aria-label="Close"
             >
-            <img src="/assets/icons/close.png" alt="Close" />
+                <img src="/assets/icons/close.png" alt="Close" />
             </button>
-            <nav className="mt-16">
-            <ul className="text-slate-900">
-                <Link href='/profile'>
-                    <li className="p-4 hover:text-slate-50 hover:bg-coconut text-md border-b-2" onClick={handleNavigation}>
-                        {!session.user.image ? (
-                            <IoPersonOutline size={50} className="my-3" />
-                        ) : (
-                            <img src={session.user.image} alt="Profile Picture" height={50} width={50} className="border-2 border-slate-300 rounded-full my-3" />
-                        )}
-                        <p>{session.user.email}</p>
+            <nav className="mt-16 flex flex-col items-center">
+                <div className="flex flex-col items-center mb-6">
+                    {!session?.user?.image ? (
+                        <div className="w-16 h-16 flex items-center justify-center rounded-full bg-orange-200 shadow-inner mb-2">
+                            <IoPersonOutline size={40} className="text-orange-400" />
+                        </div>
+                    ) : (
+                        <img src={session.user.image} alt="Profile Picture" height={64} width={64} className="border-2 border-orange-300 rounded-full mb-2 object-cover w-16 h-16" />
+                    )}
+                    <p className="text-base font-semibold text-orange-800">{session?.user?.email}</p>
+                </div>
+                <ul className="w-full flex flex-col gap-2">
+                    <li>
+                        <Link href='/profile' onClick={handleNavigation} className="block w-full px-6 py-3 rounded-xl text-md font-semibold hover:bg-orange-200 hover:text-orange-900 transition">
+                            My Profile
+                        </Link>
                     </li>
-                </Link>
-                <Link href='/history'>
-                    <li className="p-4 hover:text-slate-50 hover:bg-coconut" onClick={handleNavigation}><p>Order History</p></li>
-                </Link>
-                <Link href='/'>
-                    <li className="p-4 hover:text-slate-50 hover:bg-coconut" onClick={signOut}><p>Sign Out</p></li>
-                </Link>
-            </ul>
+                    <li>
+                        <Link href='/history' onClick={handleNavigation} className="block w-full px-6 py-3 rounded-xl text-md font-semibold hover:bg-orange-200 hover:text-orange-900 transition">
+                            Order History
+                        </Link>
+                    </li>
+                    <li>
+                        <button
+                            className="block w-full text-left px-6 py-3 rounded-xl text-md font-semibold hover:bg-orange-200 hover:text-orange-900 transition"
+                            onClick={() => { signOut(); toggleNav(); }}
+                        >
+                            Sign Out
+                        </button>
+                    </li>
+                </ul>
             </nav>
         </div>
-
         {/* Overlay to close side nav when clicking outside */}
         <div
-            className={`fixed inset-0 bg-black opacity-50 transition-opacity ${
-            isOpen ? 'block' : 'hidden'
-            } z-40`}
+            className={`fixed inset-0 bg-black/40 transition-opacity ${isOpen ? 'block' : 'hidden'} z-40`}
             onClick={toggleNav}
-        >
-        </div>
+        />
         </>
-    )
-}
+    );
+};
 
-export default ProfileNav
+export default ProfileNav;
