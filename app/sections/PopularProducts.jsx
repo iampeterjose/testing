@@ -57,6 +57,7 @@ const PopularProducts = () => {
             image={coffee.image}
             description="coffee"
             price={Number(coffee.price).toFixed(2)}
+            imageSize="large"
           />
         ))}
         {!isLoading && limitedCoffeeData.length === 0 && (

@@ -57,12 +57,12 @@ const NavBottom = () => {
     }, [lastScrollBottom]);
 
     return (
-        <div className="">
+        <div className="md:hidden">
         {session?.user && 
         <>
         <ProfileNav toggleNav={toggleNav} isOpen={isOpen} />
         {/* Mobile Bottom Nav */}
-        <div className={`md:hidden fixed -bottom-24 left-0 z-50 w-full h-20 border-t border-orange-200 bg-white/90 shadow-2xl rounded-t-2xl transition-transform duration-300 ${isNavBottomVisible ? 'translate-y-0' : 'translate-y-full'}`}>
+        <div className={`fixed -bottom-24 left-0 z-50 w-full h-20 border-t border-orange-200 bg-white/90 shadow-2xl rounded-t-2xl transition-transform duration-300 ${isNavBottomVisible ? 'translate-y-0' : 'translate-y-full'}`}>
             <div className="grid h-full max-w-full grid-cols-3 mx-auto text-sm">
                 <Link href='/' className="inline-flex flex-col items-center justify-center gap-1 hover:bg-orange-50 transition font-semibold text-orange-700">
                     <span className="flex items-center">

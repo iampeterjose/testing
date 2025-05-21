@@ -103,7 +103,7 @@ const Cart = () => {
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-2 mt-4 md:mt-0">
-                                                <button hidden={checkOut} type="button" className="p-2 w-8 h-8 rounded-full bg-orange-200 text-orange-700 hover:bg-orange-300 flex items-center justify-center" onClick={() => handleDecrementQuantity(item.id)}>
+                                                <button hidden={checkOut} type="button" className="p-2 w-8 h-8 rounded-full bg-orange-200 text-orange-700 hover:bg-orange-300 flex items-center justify-center" onClick={() => handleDecrementQuantity(item.id)} disabled={checkOut}>
                                                     <FiMinus />
                                                 </button>
                                                 <input type="text"
@@ -112,7 +112,7 @@ const Cart = () => {
                                                     className="w-12 h-10 border-b-2 px-3 py-2 text-center text-lg border-orange-200 bg-white"
                                                     onChange={(e) => handleQuantityChange(item.id, e)}
                                                 />
-                                                <button hidden={checkOut} type="button" className="p-2 w-8 h-8 rounded-full bg-orange-200 text-orange-700 hover:bg-orange-300 flex items-center justify-center" onClick={() => handleIncrementQuantity(item.id)}>
+                                                <button hidden={checkOut} type="button" className="p-2 w-8 h-8 rounded-full bg-orange-200 text-orange-700 hover:bg-orange-300 flex items-center justify-center" onClick={() => handleIncrementQuantity(item.id)} disabled={checkOut}>
                                                     <FiPlus />
                                                 </button>
                                             </div>
