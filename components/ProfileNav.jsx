@@ -12,17 +12,17 @@ const ProfileNav = ({ toggleNav, isOpen }) => {
     return (
         <>
         <div
-            className={`fixed top-0 left-0 w-full h-full z-50 flex md:hidden`}
+            className={`fixed top-0 left-0 w-full h-full z-50 flex md:hidden pointer-events-none`}
             style={{ minHeight: '100dvh', maxHeight: '100dvh' }}
         >
             {/* Overlay to close side nav when clicking outside, covers entire screen */}
             <div
-                className={`absolute inset-0 bg-black/40 transition-opacity ${isOpen ? 'block' : 'hidden'} z-40 md:hidden`}
+                className={`absolute inset-0 bg-black/40 transition-opacity ${isOpen ? 'block' : 'hidden'} z-40 md:hidden ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
                 onClick={toggleNav}
             />
             {/* Side Drawer */}
             <div
-                className={`relative h-full w-72 bg-gradient-to-br from-orange-100 to-orange-50 text-orange-900 duration-500 ease-in-out transition-transform transform shadow-2xl rounded-r-3xl border-r-2 border-orange-200 flex flex-col z-50 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                className={`relative h-full w-72 bg-gradient-to-br from-orange-100 to-orange-50 text-orange-900 duration-500 ease-in-out transition-transform transform shadow-2xl rounded-r-3xl border-r-2 border-orange-200 flex flex-col z-50 ${isOpen ? 'translate-x-0 pointer-events-auto' : '-translate-x-full pointer-events-none'}`}
             >
                 <button
                     onClick={toggleNav}
