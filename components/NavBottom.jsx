@@ -20,58 +20,44 @@ const NavBottom = () => {
     };
 
     useEffect(() => {
-        if (isOpen) {
-          document.body.style.overflow = 'hidden'; // Disable scrolling
-        } else {
-          document.body.style.overflow = ''; // Enable scrolling
-        }
-    
-        // Cleanup function to ensure overflow is reset when the component unmounts
+        document.body.style.overflow = isOpen ? "hidden" : "";
         return () => {
-          document.body.style.overflow = '';
+            document.body.style.overflow = "";
         };
     }, [isOpen]);
 
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollBottom = window.pageYOffset;
-            if(!isOpen){
-                // Show nav when scrolling up or near the top of the page
-                if (currentScrollBottom < lastScrollBottom || currentScrollBottom < 10) {
-                    setIsNavBottomVisible(true);
-                } else {
-                    // Hide nav when scrolling down
-                    setIsNavBottomVisible(false);
-                }
-            }
-            else{
+            if (!isOpen) {
+                setIsNavBottomVisible(currentScrollBottom < lastScrollBottom || currentScrollBottom < 10);
+            } else {
                 setIsNavBottomVisible(true);
             }
-            
             setLastScrollBottom(currentScrollBottom);
-            
         };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
     }, [lastScrollBottom]);
+
+    // Do not render anything if not signed in
+    if (!session?.user) return null;
 
     return (
         <>
-        {session?.user && (
-            <div className="fixed md:hidden bottom-0 left-0 z-50 w-full h-20 border-t border-orange-200 bg-white/90 shadow-2xl rounded-t-2xl transition-transform duration-300"
-                style={{ transform: isNavBottomVisible ? 'translateY(0)' : 'translateY(100%)' }}
+            <ProfileNav toggleNav={toggleNav} isOpen={isOpen} />
+
+            <div className="fixed md:hidden bottom-0 left-0 z-40 w-full h-20 border-t border-orange-200 bg-white/90 shadow-2xl rounded-t-2xl transition-transform duration-300"
+                style={{ transform: isNavBottomVisible ? "translateY(0)" : "translateY(100%)" }}
             >
-                <ProfileNav toggleNav={toggleNav} isOpen={isOpen} />
                 <div className="grid h-full max-w-full grid-cols-3 mx-auto text-sm">
                     <Link href='/' className="inline-flex flex-col items-center justify-center gap-1 hover:bg-orange-50 transition font-semibold text-orange-700">
-                        <span className="flex items-center">
-                            <GoHome size={26} />
-                        </span>
+                        <span className="flex items-center"><GoHome size={26} /></span>
                         <span className="text-xs">Home</span>
                     </Link>
                     <Link href='/cart' className="inline-flex flex-col items-center justify-center gap-1 hover:bg-orange-50 transition font-semibold text-orange-700 relative">
-                        <span className="flex items-center relative"> 
+                        <span className="flex items-center relative">
                             <FiShoppingBag size={24} />
                             {getTotalQuantity() > 0 && (
                                 <span className="absolute -top-2 -right-4 bg-orange-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full shadow border-2 border-white animate-bounce">
@@ -93,9 +79,8 @@ const NavBottom = () => {
                     </button>
                 </div>
             </div>
-        )}
         </>
-    )
-}
+    );
+};
 
 export default NavBottom;

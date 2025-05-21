@@ -76,6 +76,18 @@ const Nav = () => {
                 <div onClick={toggleMenu} className="text-3xl absolute right-6 top-5 cursor-pointer md:hidden">
                     <img src="/assets/icons/hamburger.png" alt="Menu" width={28} height={28} />
                 </div>
+                {/* Mobile Sign In button (top right, like hamburger) */}
+                {!session?.user && (
+                    <div className="md:hidden absolute right-20 top-4 flex items-center justify-center">
+                        <button
+                            className="px-4 py-2 border-2 border-orange-600 text-orange-600 rounded-full text-base font-semibold hover:bg-orange-600 hover:text-white transition shadow bg-white"
+                            onClick={openModal}
+                            style={{ maxWidth: 120 }}
+                        >
+                            Sign In
+                        </button>
+                    </div>
+                )}
                 {/* Nav Links */}
                 <ul className={`md:flex md:items-center md:space-x-8 md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-8 transition-all duration-500 ease-in ${isMenuOpen ? 'absolute top-20 shadow-xl' : 'absolute top-[-490px]'} md:static md:shadow-none bg-white/90 md:bg-transparent`}>
                     {navLinks.map((link) => (
