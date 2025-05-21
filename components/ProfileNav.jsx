@@ -11,7 +11,7 @@ const ProfileNav = ({ toggleNav, isOpen }) => {
 
     return (
         <>
-        {/* Side Drawer - only visible on small screens */}
+        {/* Side Drawer - only visible on small screens, overlays entire screen */}
         <div
             className={`fixed top-0 left-0 h-full w-72 z-50 bg-gradient-to-br from-orange-100 to-orange-50 text-orange-900 duration-500 ease-in-out transition-transform transform shadow-2xl rounded-r-3xl border-r-2 border-orange-200 flex flex-col md:hidden ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
             style={{ minHeight: '100dvh', maxHeight: '100dvh' }}
@@ -56,7 +56,7 @@ const ProfileNav = ({ toggleNav, isOpen }) => {
                 </ul>
             </nav>
         </div>
-        {/* Overlay to close side nav when clicking outside */}
+        {/* Overlay to close side nav when clicking outside, covers entire screen */}
         <div
             className={`fixed inset-0 bg-black/40 transition-opacity ${isOpen ? 'block' : 'hidden'} z-40 md:hidden`}
             onClick={toggleNav}
