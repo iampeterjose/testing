@@ -86,7 +86,7 @@ const Cart = () => {
     return (
         <div className="flex flex-col min-h-screen bg-gradient-to-br from-orange-50 to-white">
             <main className="flex-grow flex items-center justify-center">
-                <div className="w-full max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl p-4 md:p-8 mt-4 md:mt-14 flex flex-col md:flex-row gap-10">
+                <div className="w-full max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl p-4 md:p-8 mt-24 md:mt-14 flex flex-col md:flex-row gap-10">
                     {/* Cart Items Section */}
                     <div className="w-full md:w-2/3">
                         <h1 className="text-4xl font-extrabold text-orange-700 mb-8 tracking-tight drop-shadow">Cart</h1>
