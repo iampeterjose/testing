@@ -19,7 +19,7 @@ const page = () => {
     return (
         <div className="flex flex-col min-h-screen bg-gradient-to-br from-orange-50 to-white">
             <main className="flex-grow flex items-center justify-center">
-                <div className="w-full max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 md:p-8 mt-22 md:mt-14 flex flex-col items-center border border-orange-100">
+                <div className="w-full max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 md:p-8 mt-24 md:mt-14 flex flex-col items-center border border-orange-100">
                     <Link href='/' className="self-start mb-8 px-5 py-3 rounded-full bg-orange-100 hover:bg-orange-200 text-orange-700 font-bold shadow-md transition-all duration-200 flex items-center gap-2 group text-lg">
                         <GoHome size={26} className="group-hover:scale-110 transition-transform" />
                         <span className="tracking-tight">Back to Home</span>
