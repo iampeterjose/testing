@@ -73,7 +73,7 @@ const Nav = () => {
                     <span className="tracking-tight">TestApp</span>
                 </Link>
                 {/* Hamburger */}
-                <button onClick={toggleMenu} className="text-3xl absolute right-6 top-5 cursor-pointer md:hidden p-2 rounded-full bg-orange-50 hover:bg-orange-100 transition border border-orange-100">
+                <button onClick={toggleMenu} className="text-3xl absolute right-6 top-3 cursor-pointer md:hidden p-2 rounded-full bg-orange-50 hover:bg-orange-100 transition border border-orange-100">
                     <img src="/assets/icons/hamburger.png" alt="Menu" width={28} height={28} />
                 </button>
                 {/* Mobile Sign In button (top right, like hamburger) */}
@@ -89,7 +89,7 @@ const Nav = () => {
                     </div>
                 )}
                 {/* Nav Links */}
-                <ul className={`md:flex md:items-center md:space-x-8 md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-8 transition-all duration-500 ease-in ${isMenuOpen ? 'absolute top-20 shadow-xl rounded-b-3xl border-b-2 border-orange-100' : 'absolute top-[-490px]'} md:static md:shadow-none bg-white/90 md:bg-transparent`}>
+                <ul className={`md:flex md:items-center md:space-x-8 md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-8 transition-all duration-500 ease-in ${isMenuOpen ? 'absolute top-16 shadow-xl rounded-b-3xl border-b-2 border-orange-100' : 'absolute top-[-490px]'} md:static md:shadow-none bg-white/90 md:bg-transparent`}>
                     {navLinks.map((link) => (
                         <li key={link.label} className="md:ml-6 text-base md:text-lg my-3 md:my-0">
                             <Link href={link.href} className="inline-block px-3 py-2 rounded-xl text-gray-800 hover:bg-orange-100 hover:text-orange-700 font-semibold transition-colors duration-200 focus:bg-orange-200 focus:text-orange-900 focus:outline-none">
@@ -120,7 +120,7 @@ const Nav = () => {
                             onClick={toggleDropdown}
                         />
                         {dropdown &&
-                            <div className="absolute right-16 z-20 top-16 w-56 origin-top-right divide-y divide-gray-100 rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none animate-fade-in">
+                            <div className="absolute right-6 z-20 top-16 w-56 origin-top-right divide-y divide-gray-100 rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none animate-fade-in">
                                 <div className="py-2" role="none" onClick={toggleDropdown}>
                                     <Link href='/profile'>
                                         <p className="block px-4 py-2 text-sm text-gray-700 font-semibold hover:bg-orange-50">{session.user.email}</p>
