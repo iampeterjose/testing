@@ -78,7 +78,7 @@ const Nav = () => {
                 </button>
                 {/* Mobile Sign In button (top right, like hamburger) */}
                 {!session?.user && (
-                    <div className="md:hidden absolute right-20 top-4 flex items-center justify-center">
+                    <div className="md:hidden absolute right-20 top-3 flex items-center justify-center">
                         <button
                             className="px-4 py-2 border-2 border-orange-600 text-orange-600 rounded-full text-base font-semibold hover:bg-orange-600 hover:text-white transition shadow bg-white"
                             onClick={openModal}
