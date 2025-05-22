@@ -45,30 +45,32 @@ const History = () => {
     return (
         <div className="flex flex-col min-h-screen bg-gradient-to-br from-orange-50 to-white">
             <main className="flex-grow flex items-center justify-center">
-                <div className="w-full max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-6 md:p-12 mt-32 md:mt-24">
-                    <Link href='/' className='inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-orange-50 hover:bg-orange-100 text-orange-700 font-semibold shadow transition-all duration-200 group'>
-                        <GoHome size={22} className="group-hover:scale-110 transition-transform" />
+                <div className="w-full max-w-3xl mx-auto bg-white rounded-3xl shadow-2xl p-8 md:p-16 mt-32 md:mt-24 border border-orange-100">
+                    <Link href='/' className='inline-flex items-center gap-2 mb-8 px-5 py-3 rounded-full bg-orange-100 hover:bg-orange-200 text-orange-700 font-bold shadow-md transition-all duration-200 group text-lg'>
+                        <GoHome size={26} className="group-hover:scale-110 transition-transform" />
                         <span className="tracking-tight">Back to Home</span>
                     </Link>
-                    <h1 className='text-2xl md:text-3xl font-bold text-orange-700 mb-6'>Order History</h1>
+                    <h1 className='text-3xl md:text-4xl font-extrabold text-orange-700 mb-10 tracking-tight drop-shadow'>Order History</h1>
                     {loading && (
-                        <div className="flex justify-center items-center py-8">
-                            <img src="/assets/icons/loading.svg" alt="Loading" width={40} height={40}/>
+                        <div className="flex justify-center items-center py-12">
+                            <img src="/assets/icons/loading.svg" alt="Loading" width={48} height={48}/>
                         </div>
                     )}
                     {error && (
-                        <div className="text-red-600 text-center py-4 font-semibold">{error}</div>
+                        <div className="text-red-600 text-center py-6 font-semibold text-lg bg-red-50 rounded-xl shadow">{error}</div>
                     )}
                     {!loading && allOrders.length === 0 && !error && (
-                        <div className="text-slate-500 text-center py-8">No orders found.</div>
+                        <div className="text-slate-500 text-center py-12 text-xl font-medium bg-slate-50 rounded-xl shadow">No orders found.</div>
                     )}
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-8">
                         {allOrders.map((orders, index) => (
-                            <HistoryCard 
-                                key={index} 
-                                data={orders} 
-                                index={index} 
-                            />
+                            <div className="transition-transform hover:scale-[1.01]">
+                                <HistoryCard 
+                                    key={index} 
+                                    data={orders} 
+                                    index={index} 
+                                />
+                            </div>
                         ))}
                     </div>
                 </div>

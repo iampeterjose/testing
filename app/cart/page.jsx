@@ -89,31 +89,31 @@ const Cart = () => {
                 <div className="w-full max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl p-6 md:p-12 mt-32 md:mt-24 flex flex-col md:flex-row gap-10">
                     {/* Cart Items Section */}
                     <div className="w-full md:w-2/3">
-                        <h1 className="text-3xl font-bold text-orange-700 mb-6">Cart</h1>
+                        <h1 className="text-4xl font-extrabold text-orange-700 mb-8 tracking-tight drop-shadow">Cart</h1>
                         {cartItemsFromDb.length > 0 ? (
                             <form>
-                                <ul className="flex flex-col gap-4">
+                                <ul className="flex flex-col gap-6">
                                     {cartItemsFromDb.map((item) => (
-                                        <li key={item.id} className="flex flex-col md:flex-row justify-between items-center bg-orange-50 rounded-xl shadow p-4 border border-orange-100">
-                                            <div className="flex items-center gap-4 w-full md:w-auto">
-                                                <img src={item.image} alt={item.title} className="w-20 h-20 rounded-lg object-cover border-2 border-orange-100" />
+                                        <li key={item.id} className="flex flex-col md:flex-row justify-between items-center bg-orange-50 rounded-2xl shadow p-5 border border-orange-100 transition hover:shadow-lg">
+                                            <div className="flex items-center gap-5 w-full md:w-auto">
+                                                <img src={item.image} alt={item.title} className="w-24 h-24 rounded-xl object-cover border-2 border-orange-200 shadow-sm" />
                                                 <div className="flex flex-col gap-1">
-                                                    <h3 className="text-lg font-semibold text-gray-900">{item.title}</h3>
-                                                    <p className="text-orange-700 font-bold">${(item.price * item.quantity).toFixed(2)}</p>
+                                                    <h3 className="text-xl font-semibold text-gray-900">{item.title}</h3>
+                                                    <p className="text-orange-700 font-bold text-lg">${(item.price * item.quantity).toFixed(2)}</p>
                                                 </div>
                                             </div>
-                                            <div className="flex items-center gap-2 mt-4 md:mt-0">
-                                                <button hidden={checkOut} type="button" className="p-2 w-8 h-8 rounded-full bg-orange-200 text-orange-700 hover:bg-orange-300 flex items-center justify-center" onClick={() => handleDecrementQuantity(item.id)} disabled={checkOut}>
-                                                    <FiMinus />
+                                            <div className="flex items-center gap-3 mt-4 md:mt-0">
+                                                <button hidden={checkOut} type="button" className="p-2 w-10 h-10 rounded-full bg-orange-200 text-orange-700 hover:bg-orange-300 focus:ring-2 focus:ring-orange-400 flex items-center justify-center transition" onClick={() => handleDecrementQuantity(item.id)} disabled={checkOut} aria-label="Decrease quantity">
+                                                    <FiMinus size={20} />
                                                 </button>
                                                 <input type="text"
                                                     disabled
                                                     value={item.quantity}
-                                                    className="w-12 h-10 border-b-2 px-3 py-2 text-center text-lg border-orange-200 bg-white"
+                                                    className="w-14 h-10 border-b-2 px-3 py-2 text-center text-lg border-orange-200 bg-white font-semibold"
                                                     onChange={(e) => handleQuantityChange(item.id, e)}
                                                 />
-                                                <button hidden={checkOut} type="button" className="p-2 w-8 h-8 rounded-full bg-orange-200 text-orange-700 hover:bg-orange-300 flex items-center justify-center" onClick={() => handleIncrementQuantity(item.id)} disabled={checkOut}>
-                                                    <FiPlus />
+                                                <button hidden={checkOut} type="button" className="p-2 w-10 h-10 rounded-full bg-orange-200 text-orange-700 hover:bg-orange-300 focus:ring-2 focus:ring-orange-400 flex items-center justify-center transition" onClick={() => handleIncrementQuantity(item.id)} disabled={checkOut} aria-label="Increase quantity">
+                                                    <FiPlus size={20} />
                                                 </button>
                                             </div>
                                         </li>
@@ -121,18 +121,26 @@ const Cart = () => {
                                 </ul>
                             </form>
                         ) : (
-                            <div className="flex flex-col items-center justify-center py-12">
-                                <p className="text-lg text-slate-500">No items in the cart</p>
-                                <Link href='/#products'><p className="text-orange-600 my-4 flex items-center gap-2 font-semibold hover:underline">Order now <FiShoppingBag size={22} /></p></Link>
-                                {cartLoading && <img src="/assets/icons/loading.svg" alt="Loading" width={40} height={40} />}
+                            <div className="flex flex-col items-center justify-center py-16">
+                                <p className="text-xl text-slate-500 font-medium">No items in the cart</p>
+                                <Link href='/#products'>
+                                    <span className="mt-6 px-6 py-3 bg-blue-100 text-blue-700 rounded-full font-semibold flex items-center gap-2 shadow hover:bg-blue-200 transition cursor-pointer text-lg">
+                                        Order now <FiShoppingBag size={24} />
+                                    </span>
+                                </Link>
+                                {cartLoading && <img src="/assets/icons/loading.svg" alt="Loading" width={40} height={40} className="mt-6" />}
                             </div>
                         )}
                         {cartItemsFromDb.length > 0 && !checkOut && (
-                            <div className="flex flex-col md:flex-row gap-4 mt-6">
-                                <Link href='/#products'><p className="text-blue-600 underline">Add more...</p></Link>
+                            <div className="flex flex-wrap gap-4 mt-10 items-center">
+                                <Link href='/#products'>
+                                    <span className="px-6 py-3 bg-blue-100 text-blue-700 rounded-full font-semibold flex items-center gap-2 shadow hover:bg-blue-200 transition cursor-pointer text-lg">
+                                        Add more
+                                    </span>
+                                </Link>
                                 <button
                                     onClick={() => handleClearCart(session.user.email)}
-                                    className="px-6 py-3 bg-red-500 text-white rounded-full font-semibold hover:bg-red-600 transition"
+                                    className="px-6 py-3 bg-red-500 text-white rounded-full font-semibold shadow hover:bg-red-600 focus:ring-2 focus:ring-red-300 transition text-lg"
                                 >
                                     Clear Cart
                                 </button>
@@ -141,7 +149,7 @@ const Cart = () => {
                     </div>
                     {/* Order Summary Section */}
                     {cartItemsFromDb.length > 0 && (
-                        <div className="w-full md:w-1/3 bg-orange-50 rounded-2xl shadow-md p-6 flex flex-col gap-4 mt-10 md:mt-0">
+                        <div className="w-full md:w-1/3 bg-orange-50 rounded-2xl shadow-md p-8 flex flex-col gap-6 mt-10 md:mt-0 border border-orange-100">
                             <h2 className="text-2xl font-bold text-orange-700 mb-2">Order Summary</h2>
                             <table className="table-auto w-full my-2 border-separate border-spacing-y-2">
                                 <thead className="text-left text-md bg-orange-100">
@@ -185,15 +193,19 @@ const Cart = () => {
                                 <>
                                     <Paypal grandTotal={grandTotal} onPaymentSuccess={handlePaymentSuccess} />
                                     <button
-                                        className="px-6 py-3 bg-orange-500 text-white rounded-full font-semibold hover:bg-orange-600 w-full mt-4"
+                                        className="px-6 py-3 bg-gray-300 text-gray-800 rounded-full font-semibold hover:bg-gray-400 focus:ring-2 focus:ring-gray-400 w-full mt-4 transition text-lg shadow"
                                         onClick={cancelCheckout}
-                                    >Cancel Checkout</button>
+                                    >
+                                        Cancel Checkout
+                                    </button>
                                 </>
                             ) : (
                                 <button
-                                    className="px-6 py-3 bg-blue-500 text-white rounded-full font-semibold hover:bg-blue-600 w-full"
+                                    className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-400 text-white rounded-full font-bold hover:from-orange-600 hover:to-orange-500 focus:ring-2 focus:ring-orange-400 w-full shadow-lg text-lg transition"
                                     onClick={handleCheckout}
-                                >Checkout</button>
+                                >
+                                    Checkout
+                                </button>
                             )}
                         </div>
                     )}
